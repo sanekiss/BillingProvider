@@ -10,7 +10,7 @@ namespace BillingProvider.WinForms
 {
     public partial class MainWindow : Form
     {
-        private readonly AppSettings _appSettings = new AppSettings();
+        private AppSettings _appSettings;
         private static Logger _log;
 
         public MainWindow()
@@ -21,6 +21,7 @@ namespace BillingProvider.WinForms
         private void MainWindow_Load(object sender, EventArgs e)
         {
             _log = LogManager.GetCurrentClassLogger();
+            _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
             _log.Trace("Trace message");
             _log.Debug("Debug message");
@@ -28,6 +29,7 @@ namespace BillingProvider.WinForms
             _log.Warn("Warning message");
             _log.Error("Error message");
             _log.Fatal("FATAL ERROR MESSAGE");
+            _log.Info("App loaded!");
         }
 
 

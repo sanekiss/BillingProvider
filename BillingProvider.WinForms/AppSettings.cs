@@ -1,11 +1,16 @@
+using System;
 using System.ComponentModel;
+using System.Configuration;
+using NLog;
 
 namespace BillingProvider.WinForms
 {
     //TODO: validation
-    //TODO: load from app.config
+    
     public class AppSettings
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
         #region Server
 
         [Category("Сервер")]
@@ -42,5 +47,54 @@ namespace BillingProvider.WinForms
         public string CompanyMail { get; set; } = "admin@kuzro.ru";
 
         #endregion
+
+        public AppSettings()
+        {
+            Log.Debug("Begin app settings loading");
+            try
+            {
+                ServerAddress = ConfigurationManager.AppSettings[$"{nameof(ServerAddress)}"];
+                Log.Trace($"{nameof(ServerAddress)}='{ServerAddress}'");
+
+
+                ServerPort = int.Parse(ConfigurationManager.AppSettings[$"{nameof(ServerPort)}"]);
+                Log.Trace($"{nameof(ServerPort)}='{ServerPort}'");
+
+                CashierName = ConfigurationManager.AppSettings[$"{nameof(CashierName)}"];
+                Log.Trace($"{nameof(CashierName)}='{CashierName}'");
+
+                CashierInn = ConfigurationManager.AppSettings[$"{nameof(CashierInn)}"];
+                Log.Trace($"{nameof(CashierInn)}='{CashierInn}'");
+
+                CompanyMail = ConfigurationManager.AppSettings[$"{nameof(CompanyMail)}"];
+                Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");
+
+
+                Check();
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e, "Error settings loading");
+            }
+            finally
+            {
+                Log.Debug("End app settings loading");
+            }
+        }
+
+        private void Check()
+        {
+            Log.Debug("Begin checking app settings");
+
+            //TODO
+
+            Log.Debug("End checking app settings");
+        }
+
+        //TODO
+        public bool SetValue(object property, object value)
+        {
+            return true;
+        }
     }
 }
