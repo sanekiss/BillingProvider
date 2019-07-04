@@ -3,7 +3,7 @@ using System.ComponentModel;
 namespace BillingProvider.WinForms
 {
     //TODO: validation
-    public class Settings
+    public class AppSettings
     {
         #region Server
 
@@ -19,7 +19,6 @@ namespace BillingProvider.WinForms
 
         #endregion
 
-
         #region Cashier
 
         [Category("Кассир")]
@@ -30,7 +29,7 @@ namespace BillingProvider.WinForms
         [Category("Кассир")]
         [Description("ИНН текущего кассира")]
         [DisplayName("ИНН")]
-        public string CashierINN { get; set; } = "500100732259"; //TODO: correct name ИНН
+        public string CashierInn { get; set; } = "500100732259"; //TODO: correct name ИНН
 
         #endregion
 
@@ -42,5 +41,10 @@ namespace BillingProvider.WinForms
         public string CompanyMail { get; set; } = "admin@kuzro.ru";
 
         #endregion
+
+        public AppSettings()
+        {
+            
+        }
     }
 }

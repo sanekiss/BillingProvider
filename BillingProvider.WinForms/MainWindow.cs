@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using BillingProvider.WinForms.Properties;
 
 namespace BillingProvider.WinForms
 {
     public partial class MainWindow : Form
     {
-        private readonly Settings _settings = new Settings();
+        private readonly AppSettings _appSettings = new AppSettings();
 
 
         public MainWindow()
@@ -23,7 +15,7 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            gridSettings.SelectedObject = _settings;
+            gridSettings.SelectedObject = _appSettings;
             
         }
         
