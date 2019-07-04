@@ -7,14 +7,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BillingProvider.WinForms.Properties;
 
 namespace BillingProvider.WinForms
 {
     public partial class MainWindow : Form
     {
+        private readonly Settings _settings = new Settings();
+
+
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            gridSettings.SelectedObject = _settings;
+            
+        }
+        
     }
 }
