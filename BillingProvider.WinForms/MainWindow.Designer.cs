@@ -34,7 +34,7 @@
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.создатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.открытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сохранитькакToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,8 +65,8 @@
             this.gridSettings = new System.Windows.Forms.PropertyGrid();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.gridSource = new System.Windows.Forms.DataGridView();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.rtxtLog = new System.Windows.Forms.RichTextBox();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -90,7 +90,7 @@
             this.mainMenu.Text = "menuStrip1";
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
-                this.создатьToolStripMenuItem, this.открытьToolStripMenuItem, this.toolStripSeparator,
+                this.создатьToolStripMenuItem, this.OpenToolStripMenuItem, this.toolStripSeparator,
                 this.сохранитьToolStripMenuItem, this.сохранитькакToolStripMenuItem, this.toolStripSeparator1,
                 this.печатьToolStripMenuItem, this.предварительныйпросмотрToolStripMenuItem, this.toolStripSeparator2,
                 this.выходToolStripMenuItem
@@ -106,14 +106,15 @@
                 ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
             this.создатьToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.создатьToolStripMenuItem.Text = "&Создать";
-            this.открытьToolStripMenuItem.Image =
-                ((System.Drawing.Image) (resources.GetObject("открытьToolStripMenuItem.Image")));
-            this.открытьToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            this.открытьToolStripMenuItem.ShortcutKeys =
+            this.OpenToolStripMenuItem.Image =
+                ((System.Drawing.Image) (resources.GetObject("OpenToolStripMenuItem.Image")));
+            this.OpenToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem";
+            this.OpenToolStripMenuItem.ShortcutKeys =
                 ((System.Windows.Forms.Keys) ((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.открытьToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
-            this.открытьToolStripMenuItem.Text = "&Открыть";
+            this.OpenToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.OpenToolStripMenuItem.Text = "&Открыть";
+            this.OpenToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             this.toolStripSeparator.Name = "toolStripSeparator";
             this.toolStripSeparator.Size = new System.Drawing.Size(230, 6);
             this.сохранитьToolStripMenuItem.Image =
@@ -274,6 +275,7 @@
             this.gridSource.TabIndex = 0;
             this.rtxtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
+            this.rtxtLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rtxtLog.Name = "rtxtLog";
             this.rtxtLog.Size = new System.Drawing.Size(519, 311);
             this.rtxtLog.TabIndex = 0;
@@ -313,7 +315,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem создатьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem открытьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem OpenToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сохранитькакToolStripMenuItem;

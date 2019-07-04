@@ -3,6 +3,7 @@ using System.ComponentModel;
 namespace BillingProvider.WinForms
 {
     //TODO: validation
+    //TODO: load from app.config
     public class AppSettings
     {
         #region Server
@@ -41,10 +42,5 @@ namespace BillingProvider.WinForms
         public string CompanyMail { get; set; } = "admin@kuzro.ru";
 
         #endregion
-
-        public AppSettings()
-        {
-            
-        }
     }
 }
