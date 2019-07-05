@@ -35,7 +35,7 @@ namespace BillingProvider.WinForms
         [Category("Кассир")]
         [Description("ИНН текущего кассира")]
         [DisplayName("ИНН")]
-        public string CashierInn { get; set; } = "500100732259"; //TODO: correct name ИНН
+        public string CashierVatin { get; set; } = "500100732259";
 
         #endregion
 
@@ -63,8 +63,8 @@ namespace BillingProvider.WinForms
                 CashierName = ConfigurationManager.AppSettings[$"{nameof(CashierName)}"];
                 Log.Trace($"{nameof(CashierName)}='{CashierName}'");
 
-                CashierInn = ConfigurationManager.AppSettings[$"{nameof(CashierInn)}"];
-                Log.Trace($"{nameof(CashierInn)}='{CashierInn}'");
+                CashierVatin = ConfigurationManager.AppSettings[$"{nameof(CashierVatin)}"];
+                Log.Trace($"{nameof(CashierVatin)}='{CashierVatin}'");
 
                 CompanyMail = ConfigurationManager.AppSettings[$"{nameof(CompanyMail)}"];
                 Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");

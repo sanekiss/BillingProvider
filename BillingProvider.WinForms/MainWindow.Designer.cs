@@ -252,6 +252,7 @@
             this.gridSettings.Size = new System.Drawing.Size(261, 537);
             this.gridSettings.TabIndex = 0;
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer2.Name = "splitContainer2";
@@ -259,7 +260,7 @@
             this.splitContainer2.Panel1.Controls.Add(this.gridSource);
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(519, 537);
-            this.splitContainer2.SplitterDistance = 223;
+            this.splitContainer2.SplitterDistance = 350;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             this.gridSource.AllowUserToAddRows = false;
@@ -271,13 +272,13 @@
             this.gridSource.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.gridSource.Name = "gridSource";
             this.gridSource.ReadOnly = true;
-            this.gridSource.Size = new System.Drawing.Size(519, 223);
+            this.gridSource.Size = new System.Drawing.Size(519, 350);
             this.gridSource.TabIndex = 0;
             this.rtxtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(519, 311);
+            this.rtxtLog.Size = new System.Drawing.Size(519, 184);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
