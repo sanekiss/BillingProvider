@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using BillingProvider.Core;
 using NLog;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
@@ -62,6 +63,14 @@ namespace BillingProvider.WinForms
 
                 gridSource.Update();
             }
+        }
+
+        private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
+                _appSettings.ServerLogin, _appSettings.ServerPassword);
+            
+            conn.ExecuteCommand();
         }
     }
 }

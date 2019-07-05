@@ -6,7 +6,7 @@ using NLog;
 namespace BillingProvider.WinForms
 {
     //TODO: validation
-    
+
     public class AppSettings
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
@@ -22,6 +22,17 @@ namespace BillingProvider.WinForms
         [Description("Порт, на котором запущен сервер")]
         [DisplayName("Порт")]
         public int ServerPort { get; set; } = 5893;
+
+
+        [Category("Сервер")]
+        [Description("Имя учетной записи kktserver")]
+        [DisplayName("Логин")]
+        public string ServerLogin { get; set; } = "Admin";
+
+        [Category("Сервер")]
+        [Description("Пароль от учетной записи kktserver")]
+        [DisplayName("Пароль")]
+        public string ServerPassword { get; set; } = "";
 
         #endregion
 
@@ -56,9 +67,14 @@ namespace BillingProvider.WinForms
                 ServerAddress = ConfigurationManager.AppSettings[$"{nameof(ServerAddress)}"];
                 Log.Trace($"{nameof(ServerAddress)}='{ServerAddress}'");
 
-
                 ServerPort = int.Parse(ConfigurationManager.AppSettings[$"{nameof(ServerPort)}"]);
                 Log.Trace($"{nameof(ServerPort)}='{ServerPort}'");
+
+                ServerLogin = ConfigurationManager.AppSettings[$"{nameof(ServerLogin)}"];
+                Log.Trace($"{nameof(ServerLogin)}='{ServerLogin}'");
+
+                ServerPassword = ConfigurationManager.AppSettings[$"{nameof(ServerPassword)}"];
+                Log.Trace($"{nameof(ServerPassword)}='{ServerPassword}'");
 
                 CashierName = ConfigurationManager.AppSettings[$"{nameof(CashierName)}"];
                 Log.Trace($"{nameof(CashierName)}='{CashierName}'");
