@@ -14,6 +14,8 @@ namespace BillingProvider.WinForms
         private AppSettings _appSettings;
         private static Logger _log;
 
+        private ServerConnection _conn;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -24,6 +26,10 @@ namespace BillingProvider.WinForms
             _log = LogManager.GetCurrentClassLogger();
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
+            _conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
+                _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
+                _appSettings.CashierVatin);
+
             _log.Trace("Trace message");
             _log.Debug("Debug message");
             _log.Info("Info message");
@@ -65,14 +71,6 @@ namespace BillingProvider.WinForms
             }
         }
 
-        private void создатьToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
-                _appSettings.ServerLogin, _appSettings.ServerPassword);
-
-            conn.ExecuteCommand();
-        }
-
         private bool _changed;
         private bool _processing = false;
 
@@ -95,7 +93,7 @@ namespace BillingProvider.WinForms
 
             if (_changed)
             {
-                DialogResult result = MessageBox.Show("Вы изменили настройки, сохранить изменения?",
+                var result = MessageBox.Show("Вы изменили настройки, сохранить изменения?",
                     "Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
                 switch (result)
@@ -112,7 +110,28 @@ namespace BillingProvider.WinForms
 
         private void PingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Utils.ServerAvailable($"http://{_appSettings.ServerAddress}:{_appSettings.ServerPort}");
+            Utils.ServerAvailable(_appSettings.ServerAddress, _appSettings.ServerPort);
+        }
+
+        private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _conn.RegisterTestCheck();
+        }
+
+        private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _conn.GetDataKkt();
+        }
+
+        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _appSettings.UpdateSettings();
+            _changed = false;
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Белый Н. С.\nbeliy_ns@kuzro.ru", "О программе");
         }
     }
 }

@@ -26,7 +26,7 @@ namespace BillingProvider.WinForms
         [Category("Сервер")]
         [Description("Номер устройства на сервере, 0 - первое активное")]
         [DisplayName("Номер устройства")]
-        public int ServerDeviceId { get; set; } = 0;
+        public int ServerDeviceId { get; set; }
 
 
         [Category("Сервер")]

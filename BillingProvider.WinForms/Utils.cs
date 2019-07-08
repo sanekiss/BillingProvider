@@ -1,5 +1,3 @@
-using System;
-using System.Net;
 using System.Net.Sockets;
 using NLog;
 
@@ -10,23 +8,17 @@ namespace BillingProvider.WinForms
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
 
-        public static void ServerAvailable(string server)
+        public static void ServerAvailable(string server, int port)
         {
+            var tcpClient = new TcpClient();
             try
             {
-                WebRequest.Create(server).GetResponse();
-                Log.Info($"Сервер {server} доступен!");
+                tcpClient.Connect(server, port);
+                Log.Info($"Сервер {server}:{port} доступен!");
             }
-            catch (Exception ex)
+            catch 
             {
-                if (ex is SocketException)
-                {
-                    Log.Warn($"Сервер {server} не доступен! Причина:\n{ex.Message}");
-                }
-                else
-                {
-                    Log.Info($"Сервер {server} доступен!");
-                }
+                Log.Warn($"Сервер {server}:{port} не доступен!");
             }
         }
     }

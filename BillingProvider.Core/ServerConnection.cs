@@ -16,24 +16,25 @@ namespace BillingProvider.Core
         public string Login { get; }
         public string Password { get; }
 
+        public string CashierName { get; }
+        public string CashierVatin { get; }
+
         public readonly List<string> AvailableCommands = new List<string>();
 
-        public ServerConnection(int port, string address, string login, string password)
+        public ServerConnection(int port, string address, string login, string password, string cashierName,
+            string cashierVatin)
         {
             Port = port;
             Address = address;
             Login = login;
             Password = password;
+            CashierName = cashierName;
+            CashierVatin = cashierVatin;
             _restClient = new RestClient($"http://{Address}:{Port}");
         }
 
 
-        public void ExecuteCommand()
-        {
-            GetDataKkt();
-        }
-
-        public void GetDataKkt()
+        private void ExecuteCommand(object obj)
         {
             var request = new RestRequest("Execute/", Method.POST)
             {
@@ -44,12 +45,7 @@ namespace BillingProvider.Core
             var bytes = Encoding.UTF8.GetBytes($"{Login}:{Password}");
 
             request.AddHeader("Authorization", $"Basic {Convert.ToBase64String(bytes)}");
-            request.AddBody(new
-            {
-                Command = "GetDataKKT",
-                NumDevice = 0,
-                IdCommand = Guid.NewGuid().ToString("N")
-            });
+            request.AddBody(obj);
             _restClient.ExecuteAsync(request, restResponse =>
             {
                 if (restResponse.StatusCode != HttpStatusCode.OK)
@@ -62,6 +58,87 @@ namespace BillingProvider.Core
                 }
             });
         }
-        
+
+        public void GetDataKkt()
+        {
+            ExecuteCommand(new
+            {
+                Command = "GetDataKKT",
+                NumDevice = 0,
+                IdCommand = Guid.NewGuid().ToString("N")
+            });
+        }
+
+        public void RegisterTestCheck()
+        {
+            ExecuteCommand(new
+            {
+                Command = "RegisterCheck",
+                NumDevice = 0,
+                IdCommand = Guid.NewGuid().ToString("N"),
+                IsFiscalCheck = true,
+                TypeCheck = 0,
+                NotPrint = false,
+                NumberCopies = 0,
+                CashierName,
+                CashierVATIN = CashierVatin,
+                ClientInfo = CashierName,
+                CheckStrings = new[]
+                {
+                    new
+                    {
+                        Register = new
+                        {
+                            Name = "Тестовая услуга",
+                            Quantity = 1,
+                            Price = 1,
+                            Tax = 20,
+                            Amount = 1.00,
+                            EAN13 = "1254789547853",
+                            SignMethodCalculation = 4,
+                            SignCalculationObject = 4
+                        }
+                    }
+                },
+
+                ElectronicPayment = 1
+            });
+        }
+
+        public void RegisterCheck(string clientInfo, string name, int sum, string ean13)
+        {
+            ExecuteCommand(new
+            {
+                Command = "RegisterCheck",
+                NumDevice = 0,
+                IdCommand = Guid.NewGuid().ToString("N"),
+                IsFiscalCheck = true,
+                TypeCheck = 0,
+                NotPrint = false,
+                NumberCopies = 0,
+                CashierName,
+                CashierVATIN = CashierVatin,
+                ClientInfo = clientInfo,
+                CheckStrings = new[]
+                {
+                    new
+                    {
+                        Register = new
+                        {
+                            Name = name,
+                            Quantity = 1,
+                            Price = sum,
+                            Tax = 20,
+                            Amount = sum,
+                            EAN13 = ean13,
+                            SignMethodCalculation = 4,
+                            SignCalculationObject = 4
+                        }
+                    }
+                },
+
+                ElectronicPayment = sum
+            });
+        }
     }
 }
