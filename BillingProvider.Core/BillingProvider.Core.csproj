@@ -60,7 +60,10 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Models\ClientInfo.cs" />
         <Compile Include="Models\Converter.cs" />
+        <Compile Include="Models\HtmlParser.cs" />
+        <Compile Include="Models\IParser.cs" />
         <Compile Include="Models\ListRequest.cs" />
         <Compile Include="Models\RegisterCheckRequest.cs" />
         <Compile Include="Models\Response\DataKktResponse.cs" />

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
 using NLog;
@@ -42,10 +44,10 @@ namespace BillingProvider.WinForms
                 return;
             }
 
+            Text = $"{openFileDialog.FileName} - Billing Provider";
             var doc = new HtmlDocument();
 
             doc.Load(openFileDialog.FileName, Encoding.UTF8);
-            Text = $"{openFileDialog.FileName} - Billing Provider";
             var dt = new DataTable();
 
             var captions = doc.DocumentNode.Descendants("th").ToList();
@@ -131,15 +133,41 @@ namespace BillingProvider.WinForms
         private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _conn.List();
-            
         }
 
-        private void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (var dataRow in gridSource.Rows)
+            _processing = true;
+            for (var i = 0; i < gridSource.RowCount; i++)
             {
-                
+                var currentRow = gridSource.Rows[i];
+
+                for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
+                {
+                    currentRow.Cells[j].Style.BackColor = Color.PaleGoldenrod;
+                }
+
+                try
+                {
+                    _conn.RegisterCheck(
+                        $"{currentRow.Cells[0].Value}, {currentRow.Cells[1].Value}, {currentRow.Cells[2].Value}",
+                        currentRow.Cells[3].Value.ToString(), currentRow.Cells[7].Value.ToString(), "0000101010111");
+                    await Task.Delay(10000);
+                    for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
+                    {
+                        currentRow.Cells[j].Style.BackColor = Color.YellowGreen;
+                    }
+                }
+                catch
+                {
+                    for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
+                    {
+                        currentRow.Cells[j].Style.BackColor = Color.Salmon;
+                    }
+                }
             }
+
+            _processing = false;
         }
     }
 }

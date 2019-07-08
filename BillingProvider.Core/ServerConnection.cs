@@ -51,11 +51,10 @@ namespace BillingProvider.Core
                 if (restResponse.StatusCode != HttpStatusCode.OK)
                 {
                     Log.Error($"{restResponse.StatusCode}: {restResponse.StatusDescription}");
+                    throw new Exception();
                 }
-                else
-                {
-                    Log.Info(restResponse.Content);
-                }
+
+                Log.Info(restResponse.Content);
             });
         }
 
@@ -105,7 +104,7 @@ namespace BillingProvider.Core
             });
         }
 
-        public void RegisterCheck(string clientInfo, string name, int sum, string ean13)
+        public void RegisterCheck(string clientInfo, string name, string sum, string ean13)
         {
             ExecuteCommand(new
             {
