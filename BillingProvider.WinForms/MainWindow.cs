@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -69,8 +70,45 @@ namespace BillingProvider.WinForms
         {
             var conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
                 _appSettings.ServerLogin, _appSettings.ServerPassword);
-            
+
             conn.ExecuteCommand();
+        }
+
+        private bool _changed;
+        private bool _processing;
+
+        private void gridSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            _changed = true;
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!_changed && !_processing)
+            {
+                return;
+            }
+
+            if (_processing)
+            {
+            }
+
+
+            if (_changed)
+            {
+                DialogResult result = MessageBox.Show("Вы изменили настройки, сохранить изменения?",
+                    "Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        _appSettings.UpdateSettings();
+                        break;
+                    case DialogResult.Cancel:
+                        e.Cancel = true;
+                        break;
+                }
+            }
         }
     }
 }

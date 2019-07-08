@@ -354,6 +354,8 @@
             this.gridSettings.Name = "gridSettings";
             this.gridSettings.Size = new System.Drawing.Size(261, 537);
             this.gridSettings.TabIndex = 0;
+            this.gridSettings.PropertyValueChanged +=
+                new System.Windows.Forms.PropertyValueChangedEventHandler(this.gridSettings_PropertyValueChanged);
             // 
             // splitContainer2
             // 
@@ -372,7 +374,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(519, 537);
-            this.splitContainer2.SplitterDistance = 351;
+            this.splitContainer2.SplitterDistance = 353;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -387,7 +389,7 @@
             this.gridSource.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.gridSource.Name = "gridSource";
             this.gridSource.ReadOnly = true;
-            this.gridSource.Size = new System.Drawing.Size(519, 351);
+            this.gridSource.Size = new System.Drawing.Size(519, 353);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -396,7 +398,7 @@
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(519, 183);
+            this.rtxtLog.Size = new System.Drawing.Size(519, 181);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             // 
@@ -412,6 +414,7 @@
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "MainWindow";
             this.Text = "Billing Provider";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();

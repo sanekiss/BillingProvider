@@ -107,10 +107,24 @@ namespace BillingProvider.WinForms
             Log.Debug("End checking app settings");
         }
 
-        //TODO
-        public bool SetValue(object property, object value)
+        public void UpdateSettings()
         {
-            return true;
+            Log.Debug("Begin saving app settings");
+
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            configuration.AppSettings.Settings[nameof(ServerAddress)].Value = ServerAddress;
+            configuration.AppSettings.Settings[nameof(ServerPort)].Value = ServerPort.ToString();
+            configuration.AppSettings.Settings[nameof(ServerLogin)].Value = ServerLogin;
+            configuration.AppSettings.Settings[nameof(ServerPassword)].Value = ServerPassword;
+            configuration.AppSettings.Settings[nameof(CashierName)].Value = CashierName;
+            configuration.AppSettings.Settings[nameof(CashierVatin)].Value = CashierVatin;
+            configuration.AppSettings.Settings[nameof(CompanyMail)].Value = CompanyMail;
+
+
+            configuration.Save(ConfigurationSaveMode.Full, true);
+            ConfigurationManager.RefreshSection("appSettings");
+            Log.Debug("End saving app settings");
         }
     }
 }
