@@ -140,5 +140,15 @@ namespace BillingProvider.Core
                 ElectronicPayment = sum
             });
         }
+
+
+        public void List()
+        {
+            ExecuteCommand(new
+            {
+                Command = "List",
+                NumDevice = 0
+            });
+        }
     }
 }

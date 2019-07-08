@@ -30,20 +30,14 @@ namespace BillingProvider.WinForms
                 _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
                 _appSettings.CashierVatin);
 
-            _log.Trace("Trace message");
-            _log.Debug("Debug message");
-            _log.Info("Info message");
-            _log.Warn("Warning message");
-            _log.Error("Error message");
-            _log.Fatal("FATAL ERROR MESSAGE");
-            _log.Info("App loaded!");
+            _log.Info("Приложение запущено!");
         }
 
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var result = openFileDialog.ShowDialog();
-            if (result != DialogResult.OK) // Test result.
+            if (result != DialogResult.OK)
             {
                 return;
             }
@@ -51,7 +45,7 @@ namespace BillingProvider.WinForms
             var doc = new HtmlDocument();
 
             doc.Load(openFileDialog.FileName, Encoding.UTF8);
-
+            Text = $"{openFileDialog.FileName} - Billing Provider";
             var dt = new DataTable();
 
             var captions = doc.DocumentNode.Descendants("th").ToList();
@@ -132,6 +126,20 @@ namespace BillingProvider.WinForms
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Белый Н. С.\nbeliy_ns@kuzro.ru", "О программе");
+        }
+
+        private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _conn.List();
+            
+        }
+
+        private void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var dataRow in gridSource.Rows)
+            {
+                
+            }
         }
     }
 }

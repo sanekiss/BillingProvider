@@ -44,8 +44,7 @@
             this.KktStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TestCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.фискализироватьВсеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сторнироватьПоследнийЧекToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FiscalAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainSplitontainer = new System.Windows.Forms.SplitContainer();
@@ -132,8 +131,7 @@
             this.сервисToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
                 this.PingToolStripMenuItem, this.DeviceListToolStripMenuItem, this.KktStateToolStripMenuItem,
-                this.TestCheckToolStripMenuItem, this.toolStripSeparator6, this.фискализироватьВсеToolStripMenuItem,
-                this.сторнироватьПоследнийЧекToolStripMenuItem
+                this.TestCheckToolStripMenuItem, this.toolStripSeparator6, this.FiscalAllToolStripMenuItem
             });
             this.сервисToolStripMenuItem.Name = "сервисToolStripMenuItem";
             this.сервисToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
@@ -142,46 +140,42 @@
             // PingToolStripMenuItem
             // 
             this.PingToolStripMenuItem.Name = "PingToolStripMenuItem";
-            this.PingToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.PingToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.PingToolStripMenuItem.Text = "Ping сервера";
             this.PingToolStripMenuItem.Click += new System.EventHandler(this.PingToolStripMenuItem_Click);
             // 
             // DeviceListToolStripMenuItem
             // 
             this.DeviceListToolStripMenuItem.Name = "DeviceListToolStripMenuItem";
-            this.DeviceListToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.DeviceListToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.DeviceListToolStripMenuItem.Text = "Список устройств";
+            this.DeviceListToolStripMenuItem.Click += new System.EventHandler(this.DeviceListToolStripMenuItem_Click);
             // 
             // KktStateToolStripMenuItem
             // 
             this.KktStateToolStripMenuItem.Name = "KktStateToolStripMenuItem";
-            this.KktStateToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.KktStateToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.KktStateToolStripMenuItem.Text = "Состояние ККТ";
             this.KktStateToolStripMenuItem.Click += new System.EventHandler(this.KktStateToolStripMenuItem_Click);
             // 
             // TestCheckToolStripMenuItem
             // 
             this.TestCheckToolStripMenuItem.Name = "TestCheckToolStripMenuItem";
-            this.TestCheckToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
+            this.TestCheckToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.TestCheckToolStripMenuItem.Text = "Чек на 1 рубль";
             this.TestCheckToolStripMenuItem.Click += new System.EventHandler(this.TestCheckToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(234, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(189, 6);
             // 
-            // фискализироватьВсеToolStripMenuItem
+            // FiscalAllToolStripMenuItem
             // 
-            this.фискализироватьВсеToolStripMenuItem.Name = "фискализироватьВсеToolStripMenuItem";
-            this.фискализироватьВсеToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.фискализироватьВсеToolStripMenuItem.Text = "Фискализировать все";
-            // 
-            // сторнироватьПоследнийЧекToolStripMenuItem
-            // 
-            this.сторнироватьПоследнийЧекToolStripMenuItem.Name = "сторнироватьПоследнийЧекToolStripMenuItem";
-            this.сторнироватьПоследнийЧекToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
-            this.сторнироватьПоследнийЧекToolStripMenuItem.Text = "Сторнировать последний чек";
+            this.FiscalAllToolStripMenuItem.Name = "FiscalAllToolStripMenuItem";
+            this.FiscalAllToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.FiscalAllToolStripMenuItem.Text = "Фискализировать все";
+            this.FiscalAllToolStripMenuItem.Click += new System.EventHandler(this.FiscalAllToolStripMenuItem_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -248,7 +242,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(519, 537);
-            this.splitContainer2.SplitterDistance = 360;
+            this.splitContainer2.SplitterDistance = 364;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -263,7 +257,7 @@
             this.gridSource.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.gridSource.Name = "gridSource";
             this.gridSource.ReadOnly = true;
-            this.gridSource.Size = new System.Drawing.Size(519, 360);
+            this.gridSource.Size = new System.Drawing.Size(519, 364);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -272,7 +266,7 @@
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(519, 174);
+            this.rtxtLog.Size = new System.Drawing.Size(519, 170);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             // 
@@ -327,8 +321,7 @@
         private System.Windows.Forms.ToolStripMenuItem KktStateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem TestCheckToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripMenuItem фискализироватьВсеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem сторнироватьПоследнийЧекToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem FiscalAllToolStripMenuItem;
         private System.Windows.Forms.DataGridView gridSource;
     }
 }
