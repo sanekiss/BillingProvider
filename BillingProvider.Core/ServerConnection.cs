@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using NLog;
@@ -9,10 +10,13 @@ namespace BillingProvider.Core
     public class ServerConnection
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+        private readonly RestClient _restClient;
         public int Port { get; }
         public string Address { get; }
         public string Login { get; }
         public string Password { get; }
+
+        public readonly List<string> AvailableCommands = new List<string>();
 
         public ServerConnection(int port, string address, string login, string password)
         {
@@ -20,12 +24,17 @@ namespace BillingProvider.Core
             Address = address;
             Login = login;
             Password = password;
+            _restClient = new RestClient($"http://{Address}:{Port}");
         }
 
 
         public void ExecuteCommand()
         {
-            var client = new RestClient($"http://{Address}:{Port}");
+            GetDataKkt();
+        }
+
+        public void GetDataKkt()
+        {
             var request = new RestRequest("Execute/", Method.POST)
             {
                 RequestFormat = DataFormat.Json
@@ -33,16 +42,15 @@ namespace BillingProvider.Core
 
 
             var bytes = Encoding.UTF8.GetBytes($"{Login}:{Password}");
-            var btoa = Convert.ToBase64String(bytes);
 
-            request.AddHeader("Authorization", $"Basic {btoa}");
-            request.AddBody(new Models.GetDataKktRequest
+            request.AddHeader("Authorization", $"Basic {Convert.ToBase64String(bytes)}");
+            request.AddBody(new
             {
                 Command = "GetDataKKT",
                 NumDevice = 0,
                 IdCommand = Guid.NewGuid().ToString("N")
             });
-            client.ExecuteAsync(request, restResponse =>
+            _restClient.ExecuteAsync(request, restResponse =>
             {
                 if (restResponse.StatusCode != HttpStatusCode.OK)
                 {
@@ -54,5 +62,6 @@ namespace BillingProvider.Core
                 }
             });
         }
+        
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -37,7 +36,7 @@ namespace BillingProvider.WinForms
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = openFileDialog.ShowDialog();
+            var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK) // Test result.
             {
                 return;
@@ -75,7 +74,7 @@ namespace BillingProvider.WinForms
         }
 
         private bool _changed;
-        private bool _processing;
+        private bool _processing = false;
 
         private void gridSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
@@ -109,6 +108,11 @@ namespace BillingProvider.WinForms
                         break;
                 }
             }
+        }
+
+        private void PingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Utils.ServerAvailable($"http://{_appSettings.ServerAddress}:{_appSettings.ServerPort}");
         }
     }
 }

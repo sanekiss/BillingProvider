@@ -23,6 +23,11 @@ namespace BillingProvider.WinForms
         [DisplayName("Порт")]
         public int ServerPort { get; set; } = 5893;
 
+        [Category("Сервер")]
+        [Description("Номер устройства на сервере, 0 - первое активное")]
+        [DisplayName("Номер устройства")]
+        public int ServerDeviceId { get; set; } = 0;
+
 
         [Category("Сервер")]
         [Description("Имя учетной записи kktserver")]
@@ -69,6 +74,9 @@ namespace BillingProvider.WinForms
 
                 ServerPort = int.Parse(ConfigurationManager.AppSettings[$"{nameof(ServerPort)}"]);
                 Log.Trace($"{nameof(ServerPort)}='{ServerPort}'");
+
+                ServerDeviceId = int.Parse(ConfigurationManager.AppSettings[$"{nameof(ServerDeviceId)}"]);
+                Log.Trace($"{nameof(ServerDeviceId)}='{ServerDeviceId}'");
 
                 ServerLogin = ConfigurationManager.AppSettings[$"{nameof(ServerLogin)}"];
                 Log.Trace($"{nameof(ServerLogin)}='{ServerLogin}'");
@@ -120,6 +128,7 @@ namespace BillingProvider.WinForms
             configuration.AppSettings.Settings[nameof(CashierName)].Value = CashierName;
             configuration.AppSettings.Settings[nameof(CashierVatin)].Value = CashierVatin;
             configuration.AppSettings.Settings[nameof(CompanyMail)].Value = CompanyMail;
+            configuration.AppSettings.Settings[nameof(ServerDeviceId)].Value = ServerDeviceId.ToString();
 
 
             configuration.Save(ConfigurationSaveMode.Full, true);

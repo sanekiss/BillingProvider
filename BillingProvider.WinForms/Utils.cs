@@ -1,29 +1,31 @@
 using System;
-using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
-using System.Windows.Forms;
+using NLog;
 
 namespace BillingProvider.WinForms
 {
     public static class Utils
     {
-        public static void ServerAvailable(string server, Button btn)
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+
+        public static void ServerAvailable(string server)
         {
             try
             {
                 WebRequest.Create(server).GetResponse();
-                btn.BackColor = Color.ForestGreen;
+                Log.Info($"Сервер {server} доступен!");
             }
             catch (Exception ex)
             {
-                if (ex.InnerException is SocketException)
+                if (ex is SocketException)
                 {
-                    btn.BackColor = Color.Crimson;
+                    Log.Warn($"Сервер {server} не доступен! Причина:\n{ex.Message}");
                 }
                 else
                 {
-                    btn.BackColor = Color.ForestGreen;
+                    Log.Info($"Сервер {server} доступен!");
                 }
             }
         }
