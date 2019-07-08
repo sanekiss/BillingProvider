@@ -6,7 +6,7 @@ using NLog;
 namespace BillingProvider.WinForms
 {
     //TODO: validation
-    
+
     public class AppSettings
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
@@ -23,6 +23,22 @@ namespace BillingProvider.WinForms
         [DisplayName("Порт")]
         public int ServerPort { get; set; } = 5893;
 
+        [Category("Сервер")]
+        [Description("Номер устройства на сервере, 0 - первое активное")]
+        [DisplayName("Номер устройства")]
+        public int ServerDeviceId { get; set; }
+
+
+        [Category("Сервер")]
+        [Description("Имя учетной записи kktserver")]
+        [DisplayName("Логин")]
+        public string ServerLogin { get; set; } = "Admin";
+
+        [Category("Сервер")]
+        [Description("Пароль от учетной записи kktserver")]
+        [DisplayName("Пароль")]
+        public string ServerPassword { get; set; } = "";
+
         #endregion
 
         #region Cashier
@@ -35,7 +51,7 @@ namespace BillingProvider.WinForms
         [Category("Кассир")]
         [Description("ИНН текущего кассира")]
         [DisplayName("ИНН")]
-        public string CashierInn { get; set; } = "500100732259"; //TODO: correct name ИНН
+        public string CashierVatin { get; set; } = "500100732259";
 
         #endregion
 
@@ -56,15 +72,23 @@ namespace BillingProvider.WinForms
                 ServerAddress = ConfigurationManager.AppSettings[$"{nameof(ServerAddress)}"];
                 Log.Trace($"{nameof(ServerAddress)}='{ServerAddress}'");
 
-
                 ServerPort = int.Parse(ConfigurationManager.AppSettings[$"{nameof(ServerPort)}"]);
                 Log.Trace($"{nameof(ServerPort)}='{ServerPort}'");
+
+                ServerDeviceId = int.Parse(ConfigurationManager.AppSettings[$"{nameof(ServerDeviceId)}"]);
+                Log.Trace($"{nameof(ServerDeviceId)}='{ServerDeviceId}'");
+
+                ServerLogin = ConfigurationManager.AppSettings[$"{nameof(ServerLogin)}"];
+                Log.Trace($"{nameof(ServerLogin)}='{ServerLogin}'");
+
+                ServerPassword = ConfigurationManager.AppSettings[$"{nameof(ServerPassword)}"];
+                Log.Trace($"{nameof(ServerPassword)}='{ServerPassword}'");
 
                 CashierName = ConfigurationManager.AppSettings[$"{nameof(CashierName)}"];
                 Log.Trace($"{nameof(CashierName)}='{CashierName}'");
 
-                CashierInn = ConfigurationManager.AppSettings[$"{nameof(CashierInn)}"];
-                Log.Trace($"{nameof(CashierInn)}='{CashierInn}'");
+                CashierVatin = ConfigurationManager.AppSettings[$"{nameof(CashierVatin)}"];
+                Log.Trace($"{nameof(CashierVatin)}='{CashierVatin}'");
 
                 CompanyMail = ConfigurationManager.AppSettings[$"{nameof(CompanyMail)}"];
                 Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");
@@ -91,10 +115,25 @@ namespace BillingProvider.WinForms
             Log.Debug("End checking app settings");
         }
 
-        //TODO
-        public bool SetValue(object property, object value)
+        public void UpdateSettings()
         {
-            return true;
+            Log.Debug("Begin saving app settings");
+
+            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            configuration.AppSettings.Settings[nameof(ServerAddress)].Value = ServerAddress;
+            configuration.AppSettings.Settings[nameof(ServerPort)].Value = ServerPort.ToString();
+            configuration.AppSettings.Settings[nameof(ServerLogin)].Value = ServerLogin;
+            configuration.AppSettings.Settings[nameof(ServerPassword)].Value = ServerPassword;
+            configuration.AppSettings.Settings[nameof(CashierName)].Value = CashierName;
+            configuration.AppSettings.Settings[nameof(CashierVatin)].Value = CashierVatin;
+            configuration.AppSettings.Settings[nameof(CompanyMail)].Value = CompanyMail;
+            configuration.AppSettings.Settings[nameof(ServerDeviceId)].Value = ServerDeviceId.ToString();
+
+
+            configuration.Save(ConfigurationSaveMode.Full, true);
+            ConfigurationManager.RefreshSection("appSettings");
+            Log.Debug("End saving app settings");
         }
     }
 }
