@@ -36,6 +36,7 @@ namespace BillingProvider.Core
 
         private void ExecuteCommand(object obj)
         {
+            Log.Debug("Begin command execution");
             var request = new RestRequest("Execute/", Method.POST)
             {
                 RequestFormat = DataFormat.Json
@@ -46,9 +47,12 @@ namespace BillingProvider.Core
 
             request.AddHeader("Authorization", $"Basic {Convert.ToBase64String(bytes)}");
             request.AddBody(obj);
+            Log.Debug($"Request: obj0={request.Parameters?[0]}");
+            Log.Debug($"Request: obj1={request.Parameters?[1]}");
+
             _restClient.ExecuteAsync(request, restResponse =>
             {
-                if (restResponse.StatusCode != HttpStatusCode.OK)
+                if (restResponse.StatusCode != HttpStatusCode.OK || restResponse.ErrorMessage != string.Empty)
                 {
                     Log.Error($"{restResponse.StatusCode}: {restResponse.StatusDescription}");
                     throw new Exception();
@@ -60,6 +64,7 @@ namespace BillingProvider.Core
 
         public void GetDataKkt()
         {
+            Log.Info($"Получение текущего состояниея КТТ");
             ExecuteCommand(new
             {
                 Command = "GetDataKKT",
@@ -70,6 +75,7 @@ namespace BillingProvider.Core
 
         public void RegisterTestCheck()
         {
+            Log.Info($"Регистрация тестового чека");
             ExecuteCommand(new
             {
                 Command = "RegisterCheck",
@@ -106,6 +112,30 @@ namespace BillingProvider.Core
 
         public void RegisterCheck(string clientInfo, string name, string sum, string ean13)
         {
+            Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}; {ean13}");
+
+            sum = sum.Replace(",", ".");
+            var checkStrings = name.Split(';');
+            var tmpStrings = new List<object>();
+            foreach (var str in checkStrings)
+            {
+                var t = str.Split('#');
+                tmpStrings.Add(new
+                {
+                    Register = new
+                    {
+                        Name = t[0],
+                        Quantity = 1,
+                        Price = t[1].Replace(",", "."),
+                        Tax = 20,
+                        Amount = t[1].Replace(",", "."),
+                        EAN13 = ean13,
+                        SignMethodCalculation = 4,
+                        SignCalculationObject = 4
+                    }
+                });
+            }
+
             ExecuteCommand(new
             {
                 Command = "RegisterCheck",
@@ -118,24 +148,7 @@ namespace BillingProvider.Core
                 CashierName,
                 CashierVATIN = CashierVatin,
                 ClientInfo = clientInfo,
-                CheckStrings = new[]
-                {
-                    new
-                    {
-                        Register = new
-                        {
-                            Name = name,
-                            Quantity = 1,
-                            Price = sum,
-                            Tax = 20,
-                            Amount = sum,
-                            EAN13 = ean13,
-                            SignMethodCalculation = 4,
-                            SignCalculationObject = 4
-                        }
-                    }
-                },
-
+                CheckStrings = tmpStrings.ToArray(),
                 ElectronicPayment = sum
             });
         }
@@ -143,6 +156,7 @@ namespace BillingProvider.Core
 
         public void List()
         {
+            Log.Info("Получение списка устройств");
             ExecuteCommand(new
             {
                 Command = "List",

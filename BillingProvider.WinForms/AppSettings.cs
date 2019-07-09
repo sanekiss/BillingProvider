@@ -62,6 +62,11 @@ namespace BillingProvider.WinForms
         [DisplayName("Email")]
         public string CompanyMail { get; set; } = "admin@kuzro.ru";
 
+        [Category("Компания")]
+        [Description("EAN13 по умолчанию")]
+        [DisplayName("EAN13")]
+        public string CompanyEan13 { get; set; } = "0000101010111";
+
         #endregion
 
         public AppSettings()
@@ -93,6 +98,9 @@ namespace BillingProvider.WinForms
                 CompanyMail = ConfigurationManager.AppSettings[$"{nameof(CompanyMail)}"];
                 Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");
 
+                CompanyEan13 = ConfigurationManager.AppSettings[$"{nameof(CompanyEan13)}"];
+                Log.Trace($"{nameof(CompanyEan13)}='{CompanyEan13}'");
+
 
                 Check();
             }
@@ -103,6 +111,7 @@ namespace BillingProvider.WinForms
             finally
             {
                 Log.Debug("End app settings loading");
+                Log.Info("Настройки успешно загружены!");
             }
         }
 
@@ -129,11 +138,13 @@ namespace BillingProvider.WinForms
             configuration.AppSettings.Settings[nameof(CashierVatin)].Value = CashierVatin;
             configuration.AppSettings.Settings[nameof(CompanyMail)].Value = CompanyMail;
             configuration.AppSettings.Settings[nameof(ServerDeviceId)].Value = ServerDeviceId.ToString();
+            configuration.AppSettings.Settings[nameof(ServerDeviceId)].Value = ServerDeviceId.ToString();
 
 
             configuration.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");
             Log.Debug("End saving app settings");
+            Log.Info("Настройки сохранены!");
         }
     }
 }

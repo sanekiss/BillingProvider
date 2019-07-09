@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
 using NLog;
-using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BillingProvider.WinForms
 {
@@ -25,50 +22,54 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            TestCheckToolStripMenuItem.Enabled = false;
+            
             _log = LogManager.GetCurrentClassLogger();
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
             _conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
                 _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
                 _appSettings.CashierVatin);
-
+            _log.Debug("MainWindow loaded");
             _log.Info("Приложение запущено!");
         }
 
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(OpenToolStripMenuItem)} clicked");
+
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK)
             {
                 return;
             }
 
-            Text = $"{openFileDialog.FileName} - Billing Provider";
-            var doc = new HtmlDocument();
-
-            doc.Load(openFileDialog.FileName, Encoding.UTF8);
+            _log.Info($"Выбран файл: {openFileDialog.FileName}");
+            Text = $@"{openFileDialog.FileName} - Billing Provider";
+            var parser = ParserSelector.Select(openFileDialog.FileName);
+            parser.Load();
             var dt = new DataTable();
-
-            var captions = doc.DocumentNode.Descendants("th").ToList();
-            foreach (var cell in captions)
-            {
-                dt.Columns.Add(cell.InnerText.Trim(), typeof(string));
-            }
-
             gridSource.DataSource = dt;
 
-            foreach (var row in doc.DocumentNode.SelectNodes("//tr").Skip(1))
+            _log.Debug($"Добавление колонок в {nameof(gridSource)}");
+            foreach (var caption in parser.Captions)
             {
-                var data = row.Descendants("td").Select(x => x.InnerText.Trim()).Cast<object>().ToArray();
-                dt.LoadDataRow(data, LoadOption.Upsert);
+                dt.Columns.Add(caption, typeof(string));
+            }
 
+            gridSource.Update();
+
+            _log.Debug($"Добавление данных в {nameof(gridSource)}");
+            foreach (var node in parser.Data)
+            {
+                dt.LoadDataRow(node.AsArray(), LoadOption.Upsert);
                 gridSource.Update();
             }
         }
 
         private bool _changed;
-        private bool _processing = false;
+        private bool _processing;
 
         private void gridSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
@@ -77,6 +78,8 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _log.Debug($"Form closing");
+
             if (!_changed && !_processing)
             {
                 return;
@@ -84,13 +87,19 @@ namespace BillingProvider.WinForms
 
             if (_processing)
             {
+                _log.Debug($"Form closing: processing = true");
+                MessageBox.Show(@"Идет обработка позиций!");
+                e.Cancel = true;
+                return;
             }
 
 
             if (_changed)
             {
-                var result = MessageBox.Show("Вы изменили настройки, сохранить изменения?",
-                    "Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                _log.Debug($"Form closing: changed = true");
+
+                var result = MessageBox.Show(@"Вы изменили настройки, сохранить изменения?",
+                    @"Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
                 switch (result)
                 {
@@ -106,68 +115,71 @@ namespace BillingProvider.WinForms
 
         private void PingToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(PingToolStripMenuItem)} clicked");
             Utils.ServerAvailable(_appSettings.ServerAddress, _appSettings.ServerPort);
         }
 
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(TestCheckToolStripMenuItem)} clicked");
             _conn.RegisterTestCheck();
         }
 
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(KktStateToolStripMenuItem)} clicked");
             _conn.GetDataKkt();
         }
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(SaveToolStripMenuItem)} clicked");
             _appSettings.UpdateSettings();
             _changed = false;
         }
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Белый Н. С.\nbeliy_ns@kuzro.ru", "О программе");
+            MessageBox.Show(@"Белый Н. С.\nbeliy_ns@kuzro.ru", @"О программе");
         }
 
         private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(DeviceListToolStripMenuItem)} clicked");
             _conn.List();
         }
 
         private async void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(FiscalAllToolStripMenuItem)} clicked");
             _processing = true;
+
+
             for (var i = 0; i < gridSource.RowCount; i++)
             {
                 var currentRow = gridSource.Rows[i];
+                _log.Debug(
+                    $"Current row: {nameof(gridSource)}.Rows[{i}]: {currentRow.Cells[3].Value}, {currentRow.Cells[2].Value}");
 
-                for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
-                {
-                    currentRow.Cells[j].Style.BackColor = Color.PaleGoldenrod;
-                }
+                Utils.ChangeBackground(currentRow, Color.PaleGoldenrod);
 
                 try
                 {
-                    _conn.RegisterCheck(
-                        $"{currentRow.Cells[0].Value}, {currentRow.Cells[1].Value}, {currentRow.Cells[2].Value}",
-                        currentRow.Cells[3].Value.ToString(), currentRow.Cells[7].Value.ToString(), "0000101010111");
+                    _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(), currentRow.Cells[3].Value.ToString(),
+                        currentRow.Cells[2].Value.ToString(), _appSettings.CompanyEan13);
+
                     await Task.Delay(10000);
-                    for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
-                    {
-                        currentRow.Cells[j].Style.BackColor = Color.YellowGreen;
-                    }
+
+                    Utils.ChangeBackground(currentRow, Color.YellowGreen);
                 }
                 catch
                 {
-                    for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
-                    {
-                        currentRow.Cells[j].Style.BackColor = Color.Salmon;
-                    }
+                    Utils.ChangeBackground(currentRow, Color.Salmon);
                 }
             }
 
             _processing = false;
+            _log.Info("Фискализация позиций завершена");
         }
     }
 }
