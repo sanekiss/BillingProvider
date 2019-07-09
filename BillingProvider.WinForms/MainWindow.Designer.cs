@@ -30,7 +30,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources =
-                new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+                new System.ComponentModel.ComponentResourceManager(typeof(BillingProvider.WinForms.MainWindow));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,9 +64,6 @@
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.gridSource)).BeginInit();
             this.SuspendLayout();
-            // 
-            // mainMenu
-            // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
                 {this.файлToolStripMenuItem, this.сервисToolStripMenuItem, this.справкаToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
@@ -74,9 +71,6 @@
             this.mainMenu.Size = new System.Drawing.Size(784, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
-            // 
-            // файлToolStripMenuItem
-            // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
                 this.OpenToolStripMenuItem, this.toolStripSeparator, this.SaveToolStripMenuItem,
@@ -85,9 +79,6 @@
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "&Файл";
-            // 
-            // OpenToolStripMenuItem
-            // 
             this.OpenToolStripMenuItem.Image =
                 ((System.Drawing.Image) (resources.GetObject("OpenToolStripMenuItem.Image")));
             this.OpenToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -97,14 +88,8 @@
             this.OpenToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.OpenToolStripMenuItem.Text = "&Открыть";
             this.OpenToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator
-            // 
             this.toolStripSeparator.Name = "toolStripSeparator";
             this.toolStripSeparator.Size = new System.Drawing.Size(170, 6);
-            // 
-            // SaveToolStripMenuItem
-            // 
             this.SaveToolStripMenuItem.Image =
                 ((System.Drawing.Image) (resources.GetObject("SaveToolStripMenuItem.Image")));
             this.SaveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -114,20 +99,11 @@
             this.SaveToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.SaveToolStripMenuItem.Text = "&Сохранить";
             this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(170, 6);
-            // 
-            // выходToolStripMenuItem
-            // 
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
             this.выходToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.выходToolStripMenuItem.Text = "Вы&ход";
-            // 
-            // сервисToolStripMenuItem
-            // 
             this.сервисToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
             {
                 this.PingToolStripMenuItem, this.DeviceListToolStripMenuItem, this.KktStateToolStripMenuItem,
@@ -136,85 +112,49 @@
             this.сервисToolStripMenuItem.Name = "сервисToolStripMenuItem";
             this.сервисToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.сервисToolStripMenuItem.Text = "&Сервис";
-            // 
-            // PingToolStripMenuItem
-            // 
             this.PingToolStripMenuItem.Name = "PingToolStripMenuItem";
             this.PingToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.PingToolStripMenuItem.Text = "Ping сервера";
             this.PingToolStripMenuItem.Click += new System.EventHandler(this.PingToolStripMenuItem_Click);
-            // 
-            // DeviceListToolStripMenuItem
-            // 
             this.DeviceListToolStripMenuItem.Name = "DeviceListToolStripMenuItem";
             this.DeviceListToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.DeviceListToolStripMenuItem.Text = "Список устройств";
             this.DeviceListToolStripMenuItem.Click += new System.EventHandler(this.DeviceListToolStripMenuItem_Click);
-            // 
-            // KktStateToolStripMenuItem
-            // 
             this.KktStateToolStripMenuItem.Name = "KktStateToolStripMenuItem";
             this.KktStateToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.KktStateToolStripMenuItem.Text = "Состояние ККТ";
             this.KktStateToolStripMenuItem.Click += new System.EventHandler(this.KktStateToolStripMenuItem_Click);
-            // 
-            // TestCheckToolStripMenuItem
-            // 
             this.TestCheckToolStripMenuItem.Name = "TestCheckToolStripMenuItem";
             this.TestCheckToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.TestCheckToolStripMenuItem.Text = "Чек на 1 рубль";
             this.TestCheckToolStripMenuItem.Click += new System.EventHandler(this.TestCheckToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator6
-            // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(189, 6);
-            // 
-            // FiscalAllToolStripMenuItem
-            // 
             this.FiscalAllToolStripMenuItem.Name = "FiscalAllToolStripMenuItem";
             this.FiscalAllToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.FiscalAllToolStripMenuItem.Text = "Фискализировать все";
             this.FiscalAllToolStripMenuItem.Click += new System.EventHandler(this.FiscalAllToolStripMenuItem_Click);
-            // 
-            // справкаToolStripMenuItem
-            // 
             this.справкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[]
                 {this.AboutToolStripMenuItem});
             this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
             this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.справкаToolStripMenuItem.Text = "Спра&вка";
-            // 
-            // AboutToolStripMenuItem
-            // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
             this.AboutToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.AboutToolStripMenuItem.Text = "&О программе...";
             this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
-            // 
-            // MainSplitontainer
-            // 
             this.MainSplitontainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainSplitontainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.MainSplitontainer.Location = new System.Drawing.Point(0, 24);
             this.MainSplitontainer.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MainSplitontainer.Name = "MainSplitontainer";
-            // 
-            // MainSplitontainer.Panel1
-            // 
             this.MainSplitontainer.Panel1.Controls.Add(this.gridSettings);
             this.MainSplitontainer.Panel1MinSize = 250;
-            // 
-            // MainSplitontainer.Panel2
-            // 
             this.MainSplitontainer.Panel2.Controls.Add(this.splitContainer2);
             this.MainSplitontainer.Panel2MinSize = 400;
             this.MainSplitontainer.Size = new System.Drawing.Size(784, 537);
             this.MainSplitontainer.SplitterDistance = 261;
             this.MainSplitontainer.TabIndex = 1;
-            // 
-            // gridSettings
-            // 
             this.gridSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridSettings.LineColor = System.Drawing.SystemColors.ControlDark;
             this.gridSettings.Location = new System.Drawing.Point(0, 0);
@@ -224,54 +164,38 @@
             this.gridSettings.TabIndex = 0;
             this.gridSettings.PropertyValueChanged +=
                 new System.Windows.Forms.PropertyValueChangedEventHandler(this.gridSettings_PropertyValueChanged);
-            // 
-            // splitContainer2
-            // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
             this.splitContainer2.Panel1.Controls.Add(this.gridSource);
-            // 
-            // splitContainer2.Panel2
-            // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(519, 537);
-            this.splitContainer2.SplitterDistance = 364;
+            this.splitContainer2.SplitterDistance = 366;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // gridSource
-            // 
             this.gridSource.AllowUserToAddRows = false;
-            this.gridSource.AllowUserToDeleteRows = false;
+            this.gridSource.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.gridSource.ColumnHeadersHeightSizeMode =
                 System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridSource.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridSource.Location = new System.Drawing.Point(0, 0);
             this.gridSource.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gridSource.MultiSelect = false;
             this.gridSource.Name = "gridSource";
             this.gridSource.ReadOnly = true;
-            this.gridSource.Size = new System.Drawing.Size(519, 364);
+            this.gridSource.ShowCellErrors = false;
+            this.gridSource.Size = new System.Drawing.Size(519, 366);
             this.gridSource.TabIndex = 0;
-            // 
-            // rtxtLog
-            // 
             this.rtxtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(519, 170);
+            this.rtxtLog.Size = new System.Drawing.Size(519, 168);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
-            // 
-            // MainWindow
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 561);

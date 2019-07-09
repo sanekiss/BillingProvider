@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
@@ -42,7 +41,7 @@ namespace BillingProvider.WinForms
                 return;
             }
 
-            Text = $"{openFileDialog.FileName} - Billing Provider";
+            Text = $@"{openFileDialog.FileName} - Billing Provider";
             var parser = ParserSelector.Select(openFileDialog.FileName);
             parser.Load();
             var dt = new DataTable();
@@ -134,12 +133,8 @@ namespace BillingProvider.WinForms
         private async void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _processing = true;
-            foreach (var row in gridSource.Rows)
-            {
-            }
 
-            
-            
+
             for (var i = 0; i < gridSource.RowCount; i++)
             {
                 var currentRow = gridSource.Rows[i];
@@ -148,8 +143,8 @@ namespace BillingProvider.WinForms
 
                 try
                 {
-                    _conn.RegisterCheck(currentRow.Cells[1].Value.ToString(), currentRow.Cells[0].Value.ToString(),
-                        currentRow.Cells[2].Value.ToString(), "0000101010111");
+                    _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(), currentRow.Cells[3].Value.ToString(),
+                        currentRow.Cells[2].Value.ToString(), _appSettings.CompanyEan13);
 
                     await Task.Delay(10000);
 
