@@ -99,7 +99,6 @@ namespace BillingProvider.Core
                             Price = 1,
                             Tax = 20,
                             Amount = 1.00,
-                            EAN13 = "1254789547853",
                             SignMethodCalculation = 4,
                             SignCalculationObject = 4
                         }
@@ -110,9 +109,9 @@ namespace BillingProvider.Core
             });
         }
 
-        public void RegisterCheck(string clientInfo, string name, string sum, string ean13)
+        public void RegisterCheck(string clientInfo, string name, string sum)
         {
-            Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}; {ean13}");
+            Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
             sum = sum.Replace(",", ".");
             var checkStrings = name.Split(';');
@@ -129,7 +128,6 @@ namespace BillingProvider.Core
                         Price = t[1].Replace(",", "."),
                         Tax = 20,
                         Amount = t[1].Replace(",", "."),
-                        EAN13 = ean13,
                         SignMethodCalculation = 4,
                         SignCalculationObject = 4
                     }

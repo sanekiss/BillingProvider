@@ -166,7 +166,7 @@ namespace BillingProvider.WinForms
                 try
                 {
                     _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(), currentRow.Cells[3].Value.ToString(),
-                        currentRow.Cells[2].Value.ToString(), _appSettings.CompanyEan13);
+                        currentRow.Cells[2].Value.ToString());
 
                     await Task.Delay(10000);
 
