@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using BillingProvider.Core.Models;
 using Microsoft.VisualBasic.FileIO;
+using NLog;
 
 namespace BillingProvider.Core
 {
     public class CsvSberParser : IParser
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
         public CsvSberParser(string path)
         {
             Data = new List<ClientInfo>();
@@ -24,6 +27,7 @@ namespace BillingProvider.Core
 
         public void Load()
         {
+            Log.Debug("Begin parsing");
             using (var parser = new TextFieldParser(Path, Encoding.Default))
             {
                 parser.TextFieldType = FieldType.Delimited;
@@ -31,11 +35,14 @@ namespace BillingProvider.Core
                 while (!parser.EndOfData)
                 {
                     var row = parser.ReadFields() ?? throw new ArgumentNullException();
+                    Log.Debug($"Read row: '{string.Join(", ", row)}'");
+
                     if (row.Length < 10)
                     {
                         continue;
                     }
 
+                    Log.Debug($"Client info: '{row[6]}; {row[7]}'");
                     var tmp = new ClientInfo
                     {
                         Address = row[7],
@@ -45,6 +52,8 @@ namespace BillingProvider.Core
                     var i = 10;
                     while (true)
                     {
+                        Log.Debug($"Read position: '{row[i + 1]}; {row[i + 2]}'");
+
                         tmp.Positions.Add(new Position {Name = row[i + 1], Sum = row[i + 2].Replace(",", ".")});
 
                         if (row[i + 3] == "[!]")
@@ -60,6 +69,9 @@ namespace BillingProvider.Core
                     Data.Add(tmp);
                 }
             }
+
+            Log.Debug("End parsing");
+            Log.Info($"Файл {Path} успешно загружен");
         }
     }
 }

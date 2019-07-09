@@ -22,36 +22,45 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            TestCheckToolStripMenuItem.Enabled = false;
+            
             _log = LogManager.GetCurrentClassLogger();
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
             _conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
                 _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
                 _appSettings.CashierVatin);
-
+            _log.Debug("MainWindow loaded");
             _log.Info("Приложение запущено!");
         }
 
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(OpenToolStripMenuItem)} clicked");
+
             var result = openFileDialog.ShowDialog();
             if (result != DialogResult.OK)
             {
                 return;
             }
 
+            _log.Info($"Выбран файл: {openFileDialog.FileName}");
             Text = $@"{openFileDialog.FileName} - Billing Provider";
             var parser = ParserSelector.Select(openFileDialog.FileName);
             parser.Load();
             var dt = new DataTable();
             gridSource.DataSource = dt;
+
+            _log.Debug($"Добавление колонок в {nameof(gridSource)}");
             foreach (var caption in parser.Captions)
             {
                 dt.Columns.Add(caption, typeof(string));
             }
 
             gridSource.Update();
+
+            _log.Debug($"Добавление данных в {nameof(gridSource)}");
             foreach (var node in parser.Data)
             {
                 dt.LoadDataRow(node.AsArray(), LoadOption.Upsert);
@@ -69,6 +78,8 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
+            _log.Debug($"Form closing");
+
             if (!_changed && !_processing)
             {
                 return;
@@ -76,7 +87,8 @@ namespace BillingProvider.WinForms
 
             if (_processing)
             {
-                MessageBox.Show(@"Идет обработка запроса!");
+                _log.Debug($"Form closing: processing = true");
+                MessageBox.Show(@"Идет обработка позиций!");
                 e.Cancel = true;
                 return;
             }
@@ -84,6 +96,8 @@ namespace BillingProvider.WinForms
 
             if (_changed)
             {
+                _log.Debug($"Form closing: changed = true");
+
                 var result = MessageBox.Show(@"Вы изменили настройки, сохранить изменения?",
                     @"Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
@@ -101,21 +115,25 @@ namespace BillingProvider.WinForms
 
         private void PingToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(PingToolStripMenuItem)} clicked");
             Utils.ServerAvailable(_appSettings.ServerAddress, _appSettings.ServerPort);
         }
 
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(TestCheckToolStripMenuItem)} clicked");
             _conn.RegisterTestCheck();
         }
 
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(KktStateToolStripMenuItem)} clicked");
             _conn.GetDataKkt();
         }
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(SaveToolStripMenuItem)} clicked");
             _appSettings.UpdateSettings();
             _changed = false;
         }
@@ -127,17 +145,21 @@ namespace BillingProvider.WinForms
 
         private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(DeviceListToolStripMenuItem)} clicked");
             _conn.List();
         }
 
         private async void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            _log.Debug($"{nameof(FiscalAllToolStripMenuItem)} clicked");
             _processing = true;
 
 
             for (var i = 0; i < gridSource.RowCount; i++)
             {
                 var currentRow = gridSource.Rows[i];
+                _log.Debug(
+                    $"Current row: {nameof(gridSource)}.Rows[{i}]: {currentRow.Cells[3].Value}, {currentRow.Cells[2].Value}");
 
                 Utils.ChangeBackground(currentRow, Color.PaleGoldenrod);
 
@@ -157,6 +179,7 @@ namespace BillingProvider.WinForms
             }
 
             _processing = false;
+            _log.Info("Фискализация позиций завершена");
         }
     }
 }

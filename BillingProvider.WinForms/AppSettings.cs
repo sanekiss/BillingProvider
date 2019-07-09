@@ -111,6 +111,7 @@ namespace BillingProvider.WinForms
             finally
             {
                 Log.Debug("End app settings loading");
+                Log.Info("Настройки успешно загружены!");
             }
         }
 
@@ -143,6 +144,7 @@ namespace BillingProvider.WinForms
             configuration.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");
             Log.Debug("End saving app settings");
+            Log.Info("Настройки сохранены!");
         }
     }
 }

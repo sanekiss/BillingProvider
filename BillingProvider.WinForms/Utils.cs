@@ -26,6 +26,8 @@ namespace BillingProvider.WinForms
 
         public static void ChangeBackground(DataGridViewRow row, Color color)
         {
+            Log.Debug($"Changing row background to: {color}");
+
             for (var i = 0; i < row.Cells.Count; i++)
             {
                 row.Cells[i].Style.BackColor = color;
