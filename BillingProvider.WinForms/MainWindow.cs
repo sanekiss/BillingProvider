@@ -74,6 +74,9 @@ namespace BillingProvider.WinForms
         private void gridSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             _changed = true;
+            _conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
+                _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
+                _appSettings.CashierVatin);
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)

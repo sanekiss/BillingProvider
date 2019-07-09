@@ -52,7 +52,7 @@ namespace BillingProvider.Core
 
             _restClient.ExecuteAsync(request, restResponse =>
             {
-                if (restResponse.StatusCode != HttpStatusCode.OK || restResponse.ErrorMessage != string.Empty)
+                if (restResponse.StatusCode != HttpStatusCode.OK)
                 {
                     Log.Error($"{restResponse.StatusCode}: {restResponse.StatusDescription}");
                     throw new Exception();

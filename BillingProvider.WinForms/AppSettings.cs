@@ -46,12 +46,14 @@ namespace BillingProvider.WinForms
         [Category("Кассир")]
         [Description("Фамилия и инициалы текущего кассира")]
         [DisplayName("Имя")]
-        public string CashierName { get; set; } = "Иванов И. И.";
+        [RefreshProperties(RefreshProperties.All)]
+        public string CashierName { get; set; }
 
         [Category("Кассир")]
         [Description("ИНН текущего кассира")]
         [DisplayName("ИНН")]
-        public string CashierVatin { get; set; } = "500100732259";
+        [RefreshProperties(RefreshProperties.All)]
+        public string CashierVatin { get; set; }
 
         #endregion
 
@@ -60,7 +62,8 @@ namespace BillingProvider.WinForms
         [Category("Компания")]
         [Description("Адрес электронной почты компании")]
         [DisplayName("Email")]
-        public string CompanyMail { get; set; } = "admin@kuzro.ru";
+        [RefreshProperties(RefreshProperties.All)]
+        public string CompanyMail { get; set; }
 
         #endregion
 
@@ -122,14 +125,28 @@ namespace BillingProvider.WinForms
             var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
             configuration.AppSettings.Settings[nameof(ServerAddress)].Value = ServerAddress;
+            Log.Trace($"{nameof(ServerAddress)}='{ServerAddress}'");
+
             configuration.AppSettings.Settings[nameof(ServerPort)].Value = ServerPort.ToString();
+            Log.Trace($"{nameof(ServerPort)}='{ServerPort}'");
+
             configuration.AppSettings.Settings[nameof(ServerLogin)].Value = ServerLogin;
+            Log.Trace($"{nameof(ServerLogin)}='{ServerLogin}'");
+
             configuration.AppSettings.Settings[nameof(ServerPassword)].Value = ServerPassword;
+            Log.Trace($"{nameof(ServerPassword)}='{ServerPassword}'");
+
             configuration.AppSettings.Settings[nameof(CashierName)].Value = CashierName;
+            Log.Trace($"{nameof(CashierName)}='{CashierName}'");
+
             configuration.AppSettings.Settings[nameof(CashierVatin)].Value = CashierVatin;
+            Log.Trace($"{nameof(CashierVatin)}='{CashierVatin}'");
+
             configuration.AppSettings.Settings[nameof(CompanyMail)].Value = CompanyMail;
+            Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");
+
             configuration.AppSettings.Settings[nameof(ServerDeviceId)].Value = ServerDeviceId.ToString();
-            configuration.AppSettings.Settings[nameof(ServerDeviceId)].Value = ServerDeviceId.ToString();
+            Log.Trace($"{nameof(ServerDeviceId)}='{ServerDeviceId}'");
 
 
             configuration.Save(ConfigurationSaveMode.Full, true);
