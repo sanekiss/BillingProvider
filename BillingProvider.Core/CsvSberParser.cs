@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using BillingProvider.Core.Models;
@@ -29,15 +30,17 @@ namespace BillingProvider.Core
                 parser.SetDelimiters(";");
                 while (!parser.EndOfData)
                 {
-                    var row = parser.ReadFields();
+                    var row = parser.ReadFields() ?? throw new ArgumentNullException();
                     if (row.Length < 10)
                     {
                         continue;
                     }
 
-                    var tmp = new ClientInfo();
-                    tmp.Address = row[7];
-                    tmp.Name = row[6];
+                    var tmp = new ClientInfo
+                    {
+                        Address = row[7],
+                        Name = row[6]
+                    };
 
                     var i = 10;
                     while (true)

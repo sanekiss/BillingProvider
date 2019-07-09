@@ -107,7 +107,30 @@ namespace BillingProvider.Core
         public void RegisterCheck(string clientInfo, string name, string sum, string ean13)
         {
             sum = sum.Replace(",", ".");
-            ExecuteCommand(new
+            var checkStrings = name.Split(';');
+            var tmp0 = new List<object>();
+            foreach (var str in checkStrings)
+            {
+                var t = str.Split('#');
+                var tmp = new
+                {
+                    Register = new
+                    {
+                        Name = t[0],
+                        Quantity = 1,
+                        Price = t[1].Replace(",", "."),
+                        Tax = 20,
+                        Amount = t[1].Replace(",", "."),
+                        EAN13 = ean13,
+                        SignMethodCalculation = 4,
+                        SignCalculationObject = 4
+                    }
+                };
+
+                tmp0.Add(tmp);
+            }
+
+            var k = new
             {
                 Command = "RegisterCheck",
                 NumDevice = 0,
@@ -119,26 +142,11 @@ namespace BillingProvider.Core
                 CashierName,
                 CashierVATIN = CashierVatin,
                 ClientInfo = clientInfo,
-                CheckStrings = new[]
-                {
-                    new
-                    {
-                        Register = new
-                        {
-                            Name = name,
-                            Quantity = 1,
-                            Price = sum,
-                            Tax = 20,
-                            Amount = sum,
-                            EAN13 = ean13,
-                            SignMethodCalculation = 4,
-                            SignCalculationObject = 4
-                        }
-                    }
-                },
-
+                CheckStrings = tmp0.ToArray(),
                 ElectronicPayment = sum
-            });
+            };
+
+            ExecuteCommand(k);
         }
 
 
