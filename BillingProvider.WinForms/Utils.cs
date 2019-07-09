@@ -1,4 +1,6 @@
+using System.Drawing;
 using System.Net.Sockets;
+using System.Windows.Forms;
 using NLog;
 
 namespace BillingProvider.WinForms
@@ -16,9 +18,17 @@ namespace BillingProvider.WinForms
                 tcpClient.Connect(server, port);
                 Log.Info($"Сервер {server}:{port} доступен!");
             }
-            catch 
+            catch
             {
                 Log.Warn($"Сервер {server}:{port} не доступен!");
+            }
+        }
+
+        public static void ChangeBackground(DataGridViewRow row, Color color)
+        {
+            for (var i = 0; i < row.Cells.Count; i++)
+            {
+                row.Cells[i].Style.BackColor = color;
             }
         }
     }

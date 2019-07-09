@@ -106,6 +106,7 @@ namespace BillingProvider.Core
 
         public void RegisterCheck(string clientInfo, string name, string sum, string ean13)
         {
+            sum = sum.Replace(",", ".");
             ExecuteCommand(new
             {
                 Command = "RegisterCheck",

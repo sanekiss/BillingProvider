@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
 using NLog;
-using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 
 namespace BillingProvider.WinForms
 {
@@ -45,30 +43,25 @@ namespace BillingProvider.WinForms
             }
 
             Text = $"{openFileDialog.FileName} - Billing Provider";
-            var doc = new HtmlDocument();
-
-            doc.Load(openFileDialog.FileName, Encoding.UTF8);
+            var parser = ParserSelector.Select(openFileDialog.FileName);
+            parser.Load();
             var dt = new DataTable();
-
-            var captions = doc.DocumentNode.Descendants("th").ToList();
-            foreach (var cell in captions)
+            gridSource.DataSource = dt;
+            foreach (var caption in parser.Captions)
             {
-                dt.Columns.Add(cell.InnerText.Trim(), typeof(string));
+                dt.Columns.Add(caption, typeof(string));
             }
 
-            gridSource.DataSource = dt;
-
-            foreach (var row in doc.DocumentNode.SelectNodes("//tr").Skip(1))
+            gridSource.Update();
+            foreach (var node in parser.Data)
             {
-                var data = row.Descendants("td").Select(x => x.InnerText.Trim()).Cast<object>().ToArray();
-                dt.LoadDataRow(data, LoadOption.Upsert);
-
+                dt.LoadDataRow(node.AsArray(), LoadOption.Upsert);
                 gridSource.Update();
             }
         }
 
         private bool _changed;
-        private bool _processing = false;
+        private bool _processing;
 
         private void gridSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
@@ -84,13 +77,16 @@ namespace BillingProvider.WinForms
 
             if (_processing)
             {
+                MessageBox.Show(@"Идет обработка запроса!");
+                e.Cancel = true;
+                return;
             }
 
 
             if (_changed)
             {
-                var result = MessageBox.Show("Вы изменили настройки, сохранить изменения?",
-                    "Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                var result = MessageBox.Show(@"Вы изменили настройки, сохранить изменения?",
+                    @"Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
                 switch (result)
                 {
@@ -127,7 +123,7 @@ namespace BillingProvider.WinForms
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Белый Н. С.\nbeliy_ns@kuzro.ru", "О программе");
+            MessageBox.Show(@"Белый Н. С.\nbeliy_ns@kuzro.ru", @"О программе");
         }
 
         private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
@@ -138,32 +134,30 @@ namespace BillingProvider.WinForms
         private async void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _processing = true;
+            foreach (var row in gridSource.Rows)
+            {
+            }
+
+            
+            
             for (var i = 0; i < gridSource.RowCount; i++)
             {
                 var currentRow = gridSource.Rows[i];
 
-                for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
-                {
-                    currentRow.Cells[j].Style.BackColor = Color.PaleGoldenrod;
-                }
+                Utils.ChangeBackground(currentRow, Color.PaleGoldenrod);
 
                 try
                 {
-                    _conn.RegisterCheck(
-                        $"{currentRow.Cells[0].Value}, {currentRow.Cells[1].Value}, {currentRow.Cells[2].Value}",
-                        currentRow.Cells[3].Value.ToString(), currentRow.Cells[7].Value.ToString(), "0000101010111");
+                    _conn.RegisterCheck(currentRow.Cells[1].Value.ToString(), currentRow.Cells[0].Value.ToString(),
+                        currentRow.Cells[2].Value.ToString(), "0000101010111");
+
                     await Task.Delay(10000);
-                    for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
-                    {
-                        currentRow.Cells[j].Style.BackColor = Color.YellowGreen;
-                    }
+
+                    Utils.ChangeBackground(currentRow, Color.YellowGreen);
                 }
                 catch
                 {
-                    for (var j = 0; j < gridSource.Rows[i].Cells.Count; j++)
-                    {
-                        currentRow.Cells[j].Style.BackColor = Color.Salmon;
-                    }
+                    Utils.ChangeBackground(currentRow, Color.Salmon);
                 }
             }
 
