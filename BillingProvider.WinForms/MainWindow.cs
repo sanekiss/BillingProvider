@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
 using NLog;
+using NLog.Fluent;
 
 namespace BillingProvider.WinForms
 {
@@ -23,7 +24,9 @@ namespace BillingProvider.WinForms
         private void MainWindow_Load(object sender, EventArgs e)
         {
             TestCheckToolStripMenuItem.Enabled = false;
-            
+            KktStateToolStripMenuItem.Enabled = false;
+            DeviceListToolStripMenuItem.Enabled = false;
+
             _log = LogManager.GetCurrentClassLogger();
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
@@ -47,8 +50,18 @@ namespace BillingProvider.WinForms
 
             _log.Info($"Выбран файл: {openFileDialog.FileName}");
             Text = $@"{openFileDialog.FileName} - Billing Provider";
+
             var parser = ParserSelector.Select(openFileDialog.FileName);
-            parser.Load();
+            try
+            {
+                parser.Load();
+            }
+            catch
+            {
+                Log.Error($"Не удалось открыть файл: {openFileDialog.FileName}");
+            }
+
+
             var dt = new DataTable();
             gridSource.DataSource = dt;
 

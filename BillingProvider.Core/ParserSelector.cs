@@ -16,6 +16,12 @@ namespace BillingProvider.Core
                 Log.Debug("Select HtmlKbbParser");
                 return new HtmlKbbParser(path);
             }
+            
+            if (firstLine.Contains("#"))
+            {
+                Log.Debug("Select CsvKbbPareer");
+                return new CsvKbbParser(path);
+            }
 
             Log.Debug("Select CsvSberParser");
             return new CsvSberParser(path);

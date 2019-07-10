@@ -57,6 +57,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="CsvKbbParser.cs" />
         <Compile Include="CsvSberParser.cs" />
         <Compile Include="HtmlKbbParser.cs" />
         <Compile Include="IParser.cs" />

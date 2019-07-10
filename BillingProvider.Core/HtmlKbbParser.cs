@@ -43,7 +43,7 @@ namespace BillingProvider.Core
                 {
                     Address = $"{data[0]}, {data[1]}, {data[2]}",
                     Name = data[3],
-                    Sum = data[7]
+                    Sum = data[7].Replace(",", ".")
                 };
 
                 Log.Debug($"Read position: '{data[8]}; {data[7]}'");

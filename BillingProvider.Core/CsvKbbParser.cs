@@ -7,11 +7,11 @@ using NLog;
 
 namespace BillingProvider.Core
 {
-    public class CsvSberParser : IParser
+    public class CsvKbbParser : IParser
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        public CsvSberParser(string path)
+        public CsvKbbParser(string path)
         {
             Data = new List<ClientInfo>();
             Path = path;
@@ -22,6 +22,7 @@ namespace BillingProvider.Core
         }
 
         public string Path { get; }
+
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
 
@@ -35,37 +36,30 @@ namespace BillingProvider.Core
                 while (!parser.EndOfData)
                 {
                     var row = parser.ReadFields() ?? throw new ArgumentNullException();
-                    Log.Debug($"Read row: '{string.Join(", ", row)}'");
+                    Log.Debug($"Read row: '{string.Join("; ", row)}'");
 
-                    if (row.Length < 10)
+                    if (row.Length < 11)
                     {
                         continue;
                     }
 
-                    Log.Debug($"Client info: '{row[6]}; {row[7]}'");
+                    Log.Debug($"Client info: '{row[0]}; {row[1]}'");
                     var tmp = new ClientInfo
                     {
-                        Address = row[7],
-                        Name = row[6]
+                        Address = row[1],
+                        Name = row[0]
                     };
 
-                    var i = 10;
-                    while (true)
+                    Log.Debug($"Add default position: 'Утилизация ТКО#{row[3]}'");
+                    tmp.Positions.Add(new Position
                     {
-                        Log.Debug($"Read position: '{row[i + 1]}; {row[i + 2]}'");
+                        Name = "Утилизация ТКО",
+                        Sum = row[3].Replace(",", ".")
+                    });
 
-                        tmp.Positions.Add(new Position {Name = row[i + 1], Sum = row[i + 2].Replace(",", ".")});
+                    Log.Debug($"Read sum: '{row[3]}'");
+                    tmp.Sum = row[3].Replace(",", ".");
 
-                        if (row[i + 3] == "[!]")
-                        {
-                            break;
-                        }
-
-                        i += 3;
-                    }
-                    
-                    Log.Debug($"Read sum: '{row[i + 5]}'");
-                    tmp.Sum = row[i + 5].Replace(",", ".");
 
                     Data.Add(tmp);
                 }
