@@ -7,6 +7,7 @@ namespace BillingProvider.Core
     {
         List<ClientInfo> Data { get; }
         List<string> Captions { get; }
+        string Path { get; }
 
         void Load();
     }

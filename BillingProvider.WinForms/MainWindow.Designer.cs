@@ -173,7 +173,7 @@
             this.splitContainer2.Panel1.Controls.Add(this.gridSource);
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(519, 537);
-            this.splitContainer2.SplitterDistance = 366;
+            this.splitContainer2.SplitterDistance = 369;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             this.gridSource.AllowUserToAddRows = false;
@@ -185,15 +185,15 @@
             this.gridSource.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.gridSource.MultiSelect = false;
             this.gridSource.Name = "gridSource";
-            this.gridSource.ReadOnly = true;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(519, 366);
+            this.gridSource.Size = new System.Drawing.Size(519, 369);
             this.gridSource.TabIndex = 0;
             this.rtxtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(519, 168);
+            this.rtxtLog.Size = new System.Drawing.Size(519, 165);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);

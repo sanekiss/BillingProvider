@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Text;
+using System.Threading.Tasks;
+using BillingProvider.Core.Models;
+using Microsoft.VisualBasic.CompilerServices;
 using NLog;
 using RestSharp;
 
@@ -50,33 +52,33 @@ namespace BillingProvider.Core
             Log.Debug($"Request: obj0={request.Parameters?[0]}");
             Log.Debug($"Request: obj1={request.Parameters?[1]}");
 
-            _restClient.ExecuteAsync(request, restResponse =>
-            {
-                if (restResponse.StatusCode != HttpStatusCode.OK || restResponse.ErrorMessage != string.Empty)
-                {
-                    Log.Error($"{restResponse.StatusCode}: {restResponse.StatusDescription}");
-                    throw new Exception();
-                }
+            var resp = _restClient.Execute<KkmServerResponse>(request);
+            var response = resp.Data;
 
-                Log.Info(restResponse.Content);
-            });
+            if (response.Status == 2 || response.Status == 3)
+            {
+                Log.Error($"{response.Command}({response.IdCommand}): {response.Error}");
+                throw new InternalErrorException();
+            }
+
+            Log.Info($"{response.Command}({response.IdCommand}): запрос обработан успешно");
         }
 
-        public void GetDataKkt()
+        public async void GetDataKkt()
         {
             Log.Info($"Получение текущего состояниея КТТ");
-            ExecuteCommand(new
+            await Task.Run(() => ExecuteCommand(new
             {
                 Command = "GetDataKKT",
                 NumDevice = 0,
                 IdCommand = Guid.NewGuid().ToString("N")
-            });
+            }));
         }
 
-        public void RegisterTestCheck()
+        public async void RegisterTestCheck()
         {
             Log.Info($"Регистрация тестового чека");
-            ExecuteCommand(new
+            await Task.Run(() => ExecuteCommand(new
             {
                 Command = "RegisterCheck",
                 NumDevice = 0,
@@ -99,7 +101,6 @@ namespace BillingProvider.Core
                             Price = 1,
                             Tax = 20,
                             Amount = 1.00,
-                            EAN13 = "1254789547853",
                             SignMethodCalculation = 4,
                             SignCalculationObject = 4
                         }
@@ -107,12 +108,12 @@ namespace BillingProvider.Core
                 },
 
                 ElectronicPayment = 1
-            });
+            }));
         }
 
-        public void RegisterCheck(string clientInfo, string name, string sum, string ean13)
+        public void RegisterCheck(string clientInfo, string name, string sum)
         {
-            Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}; {ean13}");
+            Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
             sum = sum.Replace(",", ".");
             var checkStrings = name.Split(';');
@@ -129,7 +130,6 @@ namespace BillingProvider.Core
                         Price = t[1].Replace(",", "."),
                         Tax = 20,
                         Amount = t[1].Replace(",", "."),
-                        EAN13 = ean13,
                         SignMethodCalculation = 4,
                         SignCalculationObject = 4
                     }
@@ -154,14 +154,14 @@ namespace BillingProvider.Core
         }
 
 
-        public void List()
+        public async void List()
         {
             Log.Info("Получение списка устройств");
-            ExecuteCommand(new
+            await Task.Run(() => ExecuteCommand(new
             {
                 Command = "List",
                 NumDevice = 0
-            });
+            }));
         }
     }
 }
