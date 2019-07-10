@@ -61,6 +61,7 @@
         <Compile Include="HtmlKbbParser.cs" />
         <Compile Include="IParser.cs" />
         <Compile Include="Models\ClientInfo.cs" />
+        <Compile Include="Models\KkmServerResponse.cs" />
         <Compile Include="ParserSelector.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="ServerConnection.cs" />

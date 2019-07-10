@@ -171,7 +171,7 @@ namespace BillingProvider.WinForms
                     _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(), currentRow.Cells[3].Value.ToString(),
                         currentRow.Cells[2].Value.ToString());
 
-                    await Task.Delay(10000);
+                    await Task.Delay(1500);
 
                     Utils.ChangeBackground(currentRow, Color.YellowGreen);
                 }

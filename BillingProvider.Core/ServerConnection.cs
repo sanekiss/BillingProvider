@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Text;
+using System.Threading.Tasks;
+using BillingProvider.Core.Models;
+using Microsoft.VisualBasic.CompilerServices;
 using NLog;
 using RestSharp;
 
@@ -50,33 +52,33 @@ namespace BillingProvider.Core
             Log.Debug($"Request: obj0={request.Parameters?[0]}");
             Log.Debug($"Request: obj1={request.Parameters?[1]}");
 
-            _restClient.ExecuteAsync(request, restResponse =>
-            {
-                if (restResponse.StatusCode != HttpStatusCode.OK)
-                {
-                    Log.Error($"{restResponse.StatusCode}: {restResponse.StatusDescription}");
-                    throw new Exception();
-                }
+            var resp = _restClient.Execute<KkmServerResponse>(request);
+            var response = resp.Data;
 
-                Log.Info(restResponse.Content);
-            });
+            if (response.Status == 2 || response.Status == 3)
+            {
+                Log.Error($"{response.Command}({response.IdCommand}): {response.Error}");
+                throw new InternalErrorException();
+            }
+
+            Log.Info($"{response.Command}({response.IdCommand}): запрос обработан успешно");
         }
 
-        public void GetDataKkt()
+        public async void GetDataKkt()
         {
             Log.Info($"Получение текущего состояниея КТТ");
-            ExecuteCommand(new
+            await Task.Run(() => ExecuteCommand(new
             {
                 Command = "GetDataKKT",
                 NumDevice = 0,
                 IdCommand = Guid.NewGuid().ToString("N")
-            });
+            }));
         }
 
-        public void RegisterTestCheck()
+        public async void RegisterTestCheck()
         {
             Log.Info($"Регистрация тестового чека");
-            ExecuteCommand(new
+            await Task.Run(() => ExecuteCommand(new
             {
                 Command = "RegisterCheck",
                 NumDevice = 0,
@@ -106,7 +108,7 @@ namespace BillingProvider.Core
                 },
 
                 ElectronicPayment = 1
-            });
+            }));
         }
 
         public void RegisterCheck(string clientInfo, string name, string sum)
@@ -152,14 +154,14 @@ namespace BillingProvider.Core
         }
 
 
-        public void List()
+        public async void List()
         {
             Log.Info("Получение списка устройств");
-            ExecuteCommand(new
+            await Task.Run(() => ExecuteCommand(new
             {
                 Command = "List",
                 NumDevice = 0
-            });
+            }));
         }
     }
 }
