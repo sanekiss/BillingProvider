@@ -27,7 +27,7 @@ build:
     verbosity: minimal
 
 artifacts:
-  - path: CurrencyChart.zip
+  - path: BillingProvider.zip
     name: zip
 
 deploy:
