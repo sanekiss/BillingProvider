@@ -75,6 +75,7 @@
         <Compile Include="MainWindow.Designer.cs">
             <DependentUpon>MainWindow.cs</DependentUpon>
         </Compile>
+        <Compile Include="NLogConfig.cs" />
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AppSettings.cs" />
@@ -112,11 +113,6 @@
         </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-        <None Include="NLog.config">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-    <ItemGroup>
         <Content Include="billing.ico" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -134,19 +130,19 @@
     <Import Project="..\packages\ILRepack.Lib.MSBuild.Task.2.0.16.1\build\ILRepack.Lib.MSBuild.Task.targets" Condition="Exists('..\packages\ILRepack.Lib.MSBuild.Task.2.0.16.1\build\ILRepack.Lib.MSBuild.Task.targets')" />
     
     <Target Name="GenerateZip" AfterTargets="CleanReferenceCopyLocalPaths" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <RemoveDir Directories="@(FluentValidationExcludedCultures->'$(OutputPath)%(Filename)')"/>
+        <RemoveDir Directories="@(FluentValidationExcludedCultures->'$(OutputPath)%(Filename)')" />
         <ItemGroup>
-            <XMLFilesToDelete Include="$(TargetDir)\*.xml"/>
-            <PDBFilesToDelete Include="$(TargetDir)\*.pdb"/>
+            <XMLFilesToDelete Include="$(TargetDir)\*.xml" />
+            <PDBFilesToDelete Include="$(TargetDir)\*.pdb" />
         </ItemGroup>
-        <Delete Files="@(XMLFilesToDelete)"/>
-        <Delete Files="@(PDBFilesToDelete)"/>
+        <Delete Files="@(XMLFilesToDelete)" />
+        <Delete Files="@(PDBFilesToDelete)" />
         <ItemGroup>
-            <ZipFiles Include="$(OutDir)\**\*.*"/>
+            <ZipFiles Include="$(OutDir)\**\*.*" />
         </ItemGroup>
         <GetAssemblyIdentity AssemblyFiles="$(TargetDir)\BillingProvider.exe">
-            <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo"/>
+            <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo" />
         </GetAssemblyIdentity>
-        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider.v%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true"/>
+        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider.v%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true" />
     </Target>
 </Project>

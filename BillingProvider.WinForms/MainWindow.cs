@@ -23,6 +23,7 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            LogManager.Configuration = new NLogConfig().Instance;
             TestCheckToolStripMenuItem.Enabled = false;
             KktStateToolStripMenuItem.Enabled = false;
             DeviceListToolStripMenuItem.Enabled = false;
