@@ -35,6 +35,7 @@ namespace BillingProvider.WinForms
                 _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
                 _appSettings.CashierVatin);
             _log.Debug("MainWindow loaded");
+            CreateToolStripMenuItem_Click(sender, e);
             _log.Info("Приложение запущено!");
         }
 
@@ -172,7 +173,7 @@ namespace BillingProvider.WinForms
             _processing = true;
 
 
-            for (var i = 0; i < gridSource.RowCount; i++)
+            for (var i = 0; i < gridSource.RowCount - 1; i++)
             {
                 var currentRow = gridSource.Rows[i];
                 _log.Debug(
@@ -197,6 +198,24 @@ namespace BillingProvider.WinForms
 
             _processing = false;
             _log.Info("Фискализация позиций завершена");
+        }
+
+        private void CreateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Text = @"Billing Provider";
+
+            var dt = new DataTable();
+            gridSource.DataSource = dt;
+
+            _log.Debug($"Добавление колонок в {nameof(gridSource)}");
+            var parser = new HtmlKbbParser("");
+
+            foreach (var caption in parser.Captions)
+            {
+                dt.Columns.Add(caption, typeof(string));
+            }
+
+            gridSource.Update();
         }
     }
 }
