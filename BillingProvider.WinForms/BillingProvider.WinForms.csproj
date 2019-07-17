@@ -144,6 +144,9 @@
         <ItemGroup>
             <ZipFiles Include="$(OutDir)\**\*.*"/>
         </ItemGroup>
-        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider.zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true"/>
+        <GetAssemblyIdentity AssemblyFiles="$(TargetDir)\BillingProvider.exe">
+            <Output TaskParameter="Assemblies" ItemName="myAssemblyInfo"/>
+        </GetAssemblyIdentity>
+        <Zip ZipFileName="$(OutDir)..\..\..\BillingProvider.%(myAssemblyInfo.Version).zip" WorkingDirectory="$(OutDir)" Files="@(ZipFiles)" Flatten="False" Quiet="true"/>
     </Target>
 </Project>
