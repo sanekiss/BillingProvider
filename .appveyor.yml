@@ -2,6 +2,9 @@ image: Visual Studio 2017
 version: 0.0.{build}
 skip_non_tags: true
 
+environment:
+  RELEASE_NOTES: notes
+
 init:
     - git config --global core.autocrlf input
     # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
@@ -28,6 +31,7 @@ configuration:
     - Release
 
 before_build:
+    - ps: $env:RELEASE_NOTES = (Get-Content -Raw -Path .\ReleaseNotes.md)
     - nuget restore -verbosity quiet
 
 build:
@@ -45,7 +49,7 @@ artifacts:
 
 deploy:
   tag: $(APPVEYOR_REPO_TAG_NAME) 
-  description: "Release %APPVEYOR_REPO_TAG_NAME%"
+  description: $(RELEASE_NOTES)
   provider: GitHub
   auth_token:
     secure: cxN2nBb9zspwcuAckFj/6KyRjL3qG192nYOawUKdYjauPl8P92GYupmV9YzYdRtf
