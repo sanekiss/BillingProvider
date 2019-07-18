@@ -11,6 +11,12 @@ namespace BillingProvider.Core
         public static IParser Select(string path)
         {
             var firstLine = File.ReadLines(path).First();
+            if (firstLine == "1CClientBankExchange")
+            {
+                Log.Debug("Select OneCParser");
+                return new OneCParser(path);
+            }
+            
             if (firstLine.Contains("html"))
             {
                 Log.Debug("Select HtmlKbbParser");
