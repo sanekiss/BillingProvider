@@ -57,12 +57,16 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="BankTransfer\BankTransferDocumentParser.cs" />
+        <Compile Include="BankTransfer\StringWorks.cs" />
+        <Compile Include="BankTransfer\TransferDocument.cs" />
         <Compile Include="CsvKbbParser.cs" />
         <Compile Include="CsvSberParser.cs" />
         <Compile Include="HtmlKbbParser.cs" />
         <Compile Include="IParser.cs" />
         <Compile Include="Models\ClientInfo.cs" />
         <Compile Include="Models\KkmServerResponse.cs" />
+        <Compile Include="OneCParser.cs" />
         <Compile Include="ParserSelector.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="ServerConnection.cs" />
