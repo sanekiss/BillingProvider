@@ -50,7 +50,7 @@ namespace BillingProvider.Core
                         Name = row[0]
                     };
 
-                    Log.Debug($"Add default position: 'Утилизация ТКО#{row[3]}'");
+                    Log.Debug($"Add default position: 'Утилизация ТКО+{row[3]}'");
                     tmp.Positions.Add(new Position
                     {
                         Name = "Утилизация ТКО",

@@ -25,6 +25,6 @@ namespace BillingProvider.Core.Models
         public string Name { get; set; }
         public string Sum { get; set; }
 
-        public override string ToString() => $"{Name}#{Sum}";
+        public override string ToString() => $"{Name}+{Sum}";
     }
 }
