@@ -120,7 +120,7 @@ namespace BillingProvider.Core
             var tmpStrings = new List<object>();
             foreach (var str in checkStrings)
             {
-                var t = str.Split('#');
+                var t = str.Split('+');
                 tmpStrings.Add(new
                 {
                     Register = new
