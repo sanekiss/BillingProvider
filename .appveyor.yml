@@ -5,6 +5,11 @@ skip_non_tags: true
 environment:
   RELEASE_NOTES: notes
 
+# build cache to preserve files/folders between builds
+cache:
+# preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - packages -> **\packages.config
+  
 init:
     - git config --global core.autocrlf input
     # Set "build version number" to "short-commit-hash" or when tagged to "tag name" (Travis style)
