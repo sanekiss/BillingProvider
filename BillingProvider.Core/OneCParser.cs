@@ -21,7 +21,7 @@ namespace BillingProvider.Core
             Path = path;
             Captions = new List<string>()
             {
-                "ФИО", "Дата", "Сумма", "Позиции"
+                "ФИО", "Адрес", "Сумма", "Позиции"
             };
         }
 
@@ -49,7 +49,8 @@ namespace BillingProvider.Core
                             Sum = document.Total.ToString(CultureInfo.InvariantCulture)
                         },
                     }),
-                    Address = document.Date.ToString(CultureInfo.CurrentCulture)
+                    Address = string.Empty
+                        
                 });
             }
 

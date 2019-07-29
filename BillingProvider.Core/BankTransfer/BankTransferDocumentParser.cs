@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using NLog;
 
 namespace BillingProvider.Core.BankTransfer
@@ -29,7 +30,7 @@ namespace BillingProvider.Core.BankTransfer
         {
             int i;
             //TODO Сделать выбор кодировки. Возможна кодировка DOS 866.
-            using (var reader = new StreamReader(DocumentPath))
+            using (var reader = new StreamReader(DocumentPath, Encoding.Default))
             {
                 //Проверяем заголовок документа
                 if (reader.ReadLine() != "1CClientBankExchange")
