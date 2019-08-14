@@ -23,7 +23,7 @@ namespace BillingProvider.Core
                 return new HtmlKbbParser(path);
             }
             
-            if (firstLine.Contains("+"))
+            if (firstLine.Contains("#"))
             {
                 Log.Debug("Select CsvKbbPareer");
                 return new CsvKbbParser(path);
