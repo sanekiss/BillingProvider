@@ -1,1 +1,1 @@
-# Billing Provider v0.2.7\n\n- Fix logs\n- Fix 1C encoding\n
+# Billing Provider v0.2.8\n\n- Fix CsvKbbParser\n
