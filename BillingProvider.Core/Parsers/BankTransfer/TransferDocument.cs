@@ -1,6 +1,6 @@
 using System;
 
-namespace BillingProvider.Core.BankTransfer
+namespace BillingProvider.Core.Parsers.BankTransfer
 {
     public class TransferDocument
     {

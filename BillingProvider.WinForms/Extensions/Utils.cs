@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using NLog;
 
-namespace BillingProvider.WinForms
+namespace BillingProvider.WinForms.Extensions
 {
     public static class Utils
     {

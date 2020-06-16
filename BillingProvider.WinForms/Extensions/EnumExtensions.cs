@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace BillingProvider.WinForms
+namespace BillingProvider.WinForms.Extensions
 {
     public static class EnumExtensions
     {

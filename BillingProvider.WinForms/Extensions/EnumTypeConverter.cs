@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace BillingProvider.WinForms
+namespace BillingProvider.WinForms.Extensions
 {
     class EnumTypeConverter : EnumConverter
     {

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using BillingProvider.Core.BankTransfer;
 using BillingProvider.Core.Models;
+using BillingProvider.Core.Parsers.BankTransfer;
 using NLog;
 
-namespace BillingProvider.Core
+namespace BillingProvider.Core.Parsers
 {
     public class OneCParser : IParser
     {

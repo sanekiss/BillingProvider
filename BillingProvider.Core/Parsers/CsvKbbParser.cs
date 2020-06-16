@@ -5,7 +5,7 @@ using BillingProvider.Core.Models;
 using Microsoft.VisualBasic.FileIO;
 using NLog;
 
-namespace BillingProvider.Core
+namespace BillingProvider.Core.Parsers
 {
     public class CsvKbbParser : IParser
     {

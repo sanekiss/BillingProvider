@@ -44,7 +44,6 @@ namespace BillingProvider.Core
                 RequestFormat = DataFormat.Json
             };
 
-
             var bytes = Encoding.UTF8.GetBytes($"{Login}:{Password}");
 
             request.AddHeader("Authorization", $"Basic {Convert.ToBase64String(bytes)}");
@@ -52,16 +51,23 @@ namespace BillingProvider.Core
             Log.Debug($"Request: obj0={request.Parameters?[0]}");
             Log.Debug($"Request: obj1={request.Parameters?[1]}");
 
-            var resp = _restClient.Execute<KkmServerResponse>(request);
-            var response = resp.Data;
-
-            if (response.Status == 2 || response.Status == 3)
+            try
             {
-                Log.Error($"{response.Command}({response.IdCommand}): {response.Error}");
-                throw new InternalErrorException();
-            }
+                var resp = _restClient.Execute<KkmServerResponse>(request);
+                var response = resp.Data;
 
-            Log.Info($"{response.Command}({response.IdCommand}): запрос обработан успешно");
+                if (response.Status == 2 || response.Status == 3)
+                {
+                    throw new InternalErrorException();
+                }
+
+                Log.Info($"{response.Command}({response.IdCommand}): запрос обработан успешно");
+                Log.Info(resp.Content);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
         }
 
         public async void GetDataKkt()
@@ -73,11 +79,13 @@ namespace BillingProvider.Core
                 NumDevice = 0,
                 IdCommand = Guid.NewGuid().ToString("N")
             }));
+            
         }
 
         public async void RegisterTestCheck()
         {
             Log.Info($"Регистрация тестового чека");
+
             await Task.Run(() => ExecuteCommand(new
             {
                 Command = "RegisterCheck",

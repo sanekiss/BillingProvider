@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using NLog;
 
-namespace BillingProvider.Core.BankTransfer
+namespace BillingProvider.Core.Parsers.BankTransfer
 {
     public class BankTransferDocumentParser
     {

@@ -32,12 +32,20 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa">
+          <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a">
           <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="Microsoft.VisualBasic" />
+        <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+          <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
           <HintPath>..\packages\NLog.4.7.2\lib\net45\NLog.dll</HintPath>
           <Private>True</Private>
@@ -57,12 +65,17 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="BankTransfer\BankTransferDocumentParser.cs" />
-        <Compile Include="BankTransfer\StringWorks.cs" />
-        <Compile Include="BankTransfer\TransferDocument.cs" />
+        <Compile Include="DefaultTaskQueue.cs" />
+        <Compile Include="ITaskQueue.cs" />
+        <Compile Include="KKMDrivers\AtolOnlineDriver.cs" />
+        <Compile Include="KKMDrivers\IKKMDriver.cs" />
+        <Compile Include="KKMDrivers\KKMServerDriver.cs" />
         <Compile Include="Models\ClientInfo.cs" />
         <Compile Include="Models\KkmServerResponse.cs" />
         <Compile Include="ParserSelector.cs" />
+        <Compile Include="Parsers\BankTransfer\BankTransferDocumentParser.cs" />
+        <Compile Include="Parsers\BankTransfer\StringWorks.cs" />
+        <Compile Include="Parsers\BankTransfer\TransferDocument.cs" />
         <Compile Include="Parsers\CsvKbbParser.cs" />
         <Compile Include="Parsers\CsvSberParser.cs" />
         <Compile Include="Parsers\HtmlKbbParser.cs" />

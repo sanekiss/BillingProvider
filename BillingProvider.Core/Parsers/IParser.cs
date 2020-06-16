@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BillingProvider.Core.Models;
 
-namespace BillingProvider.Core
+namespace BillingProvider.Core.Parsers
 {
     public interface IParser
     {

@@ -41,6 +41,10 @@
           <HintPath>..\packages\HtmlAgilityPack.1.11.24\lib\Net45\HtmlAgilityPack.dll</HintPath>
           <Private>True</Private>
         </Reference>
+        <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+          <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
           <HintPath>..\packages\NLog.4.7.2\lib\net45\NLog.dll</HintPath>
           <Private>True</Private>
@@ -67,8 +71,6 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="EnumExtensions.cs" />
-        <Compile Include="EnumTypeConverter.cs" />
         <Compile Include="MainWindow.cs">
             <SubType>Form</SubType>
         </Compile>
@@ -78,7 +80,9 @@
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AppSettings.cs" />
-        <Compile Include="Utils.cs" />
+        <Compile Include="Extensions\EnumExtensions.cs" />
+        <Compile Include="Extensions\EnumTypeConverter.cs" />
+        <Compile Include="Extensions\Utils.cs" />
         <EmbeddedResource Include="MainWindow.resx">
             <DependentUpon>MainWindow.cs</DependentUpon>
         </EmbeddedResource>

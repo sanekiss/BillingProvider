@@ -5,7 +5,7 @@ using BillingProvider.Core.Models;
 using HtmlAgilityPack;
 using NLog;
 
-namespace BillingProvider.Core
+namespace BillingProvider.Core.Parsers
 {
     public class HtmlKbbParser : IParser
     {

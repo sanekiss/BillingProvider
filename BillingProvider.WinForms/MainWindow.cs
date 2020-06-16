@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
+using BillingProvider.Core.KKMDrivers;
+using BillingProvider.Core.Parsers;
+using BillingProvider.WinForms.Extensions;
 using NLog;
 using NLog.Fluent;
 
@@ -14,7 +18,9 @@ namespace BillingProvider.WinForms
         private AppSettings _appSettings;
         private static Logger _log;
 
-        private ServerConnection _conn;
+        // private ServerConnection _conn;
+        private IKkmDriver _conn;
+
 
         public MainWindow()
         {
@@ -23,16 +29,26 @@ namespace BillingProvider.WinForms
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            TestCheckToolStripMenuItem.Enabled = false;
-            KktStateToolStripMenuItem.Enabled = false;
-            DeviceListToolStripMenuItem.Enabled = false;
+            // TestCheckToolStripMenuItem.Enabled = false;
+            // KktStateToolStripMenuItem.Enabled = false;
+            // DeviceListToolStripMenuItem.Enabled = false;
 
             _log = LogManager.GetCurrentClassLogger();
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
-            _conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
-                _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
-                _appSettings.CashierVatin);
+            if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
+            {
+                _conn = new AtolOnlineDriver(_appSettings.AtolOnlineINN, _appSettings.AtolOnlineGroupID,
+                    _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
+                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
+            }
+            else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
+            {
+                _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
+                    _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
+                    _appSettings.ServerPort, _appSettings.CompanyMail);
+            }
+
             _log.Debug("MainWindow loaded");
             CreateToolStripMenuItem_Click(sender, e);
             _log.Info("Приложение запущено!");
@@ -88,9 +104,18 @@ namespace BillingProvider.WinForms
         private void gridSettings_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             _changed = true;
-            _conn = new ServerConnection(_appSettings.ServerPort, _appSettings.ServerAddress,
-                _appSettings.ServerLogin, _appSettings.ServerPassword, _appSettings.CashierName,
-                _appSettings.CashierVatin);
+            if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
+            {
+                _conn = new AtolOnlineDriver(_appSettings.AtolOnlineINN, _appSettings.AtolOnlineGroupID,
+                    _appSettings.AtolOnlineLogin, _appSettings.AtolOnlinePassword, _appSettings.CashierName,
+                    _appSettings.CashierVatin, _appSettings.AtolOnlineHostname, _appSettings.CompanyMail);
+            }
+            else if (_appSettings.KkmDriver == AppSettings.KkmDrivers.kkmserver)
+            {
+                _conn = new KkmServerDriver(_appSettings.CashierName, _appSettings.CashierVatin,
+                    _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
+                    _appSettings.ServerPort, _appSettings.CompanyMail);
+            }
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -111,29 +136,32 @@ namespace BillingProvider.WinForms
             }
 
 
-            if (_changed)
+            if (!_changed)
             {
-                _log.Debug($"Form closing: changed = true");
+                return;
+            }
 
-                var result = MessageBox.Show(@"Вы изменили настройки, сохранить изменения?",
-                    @"Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            _log.Debug($"Form closing: changed = true");
 
-                switch (result)
-                {
-                    case DialogResult.Yes:
-                        _appSettings.UpdateSettings();
-                        break;
-                    case DialogResult.Cancel:
-                        e.Cancel = true;
-                        break;
-                }
+            var result = MessageBox.Show(@"Вы изменили настройки, сохранить изменения?",
+                @"Сохранить?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+            switch (result)
+            {
+                case DialogResult.Yes:
+                    _appSettings.UpdateSettings();
+                    break;
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    break;
             }
         }
 
         private void PingToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(PingToolStripMenuItem)} clicked");
-            Utils.ServerAvailable(_appSettings.ServerAddress, _appSettings.ServerPort);
+            // Utils.ServerAvailable(_appSettings.ServerAddress, _appSettings.ServerPort);
+            _conn.TestConnection();
         }
 
         private void TestCheckToolStripMenuItem_Click(object sender, EventArgs e)
@@ -145,7 +173,7 @@ namespace BillingProvider.WinForms
         private void KktStateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(KktStateToolStripMenuItem)} clicked");
-            _conn.GetDataKkt();
+            // _conn.GetDataKkt();
         }
 
         private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -163,7 +191,7 @@ namespace BillingProvider.WinForms
         private void DeviceListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _log.Debug($"{nameof(DeviceListToolStripMenuItem)} clicked");
-            _conn.List();
+            // _conn.List();
         }
 
         private async void FiscalAllToolStripMenuItem_Click(object sender, EventArgs e)
@@ -215,6 +243,12 @@ namespace BillingProvider.WinForms
             }
 
             gridSource.Update();
+        }
+
+        private void rtxtLog_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            Process.Start(e.LinkText);
+            Log.Debug($"{e.LinkText} clicked");
         }
     }
 }
