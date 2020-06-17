@@ -62,7 +62,8 @@ namespace BillingProvider.Core.KKMDrivers
                         price = decimal.Parse(t[1].Replace(".", ",")),
                         quantity = 1.0,
                         sum = decimal.Parse(t[1].Replace(".", ",")),
-                        payment_object = "commodity",
+                        payment_object = "service",
+                        payment_method = "full_payment",
                         vat = new
                         {
                             type = "vat0"
@@ -115,7 +116,7 @@ namespace BillingProvider.Core.KKMDrivers
                         {
                             new
                             {
-                                type = 0,
+                                type = 1,
                                 sum = decimal.Parse(sum)
                             }
                         },
@@ -137,7 +138,7 @@ namespace BillingProvider.Core.KKMDrivers
             var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
             var json = JObject.Parse(res0.Data.Payload);
             var url = json["ofd_receipt_url"];
-            Log.Info($"Ссылка на ОФД: {url}");
+            Log.Info($"Ссылка на ОФД ({res.Data.Uuid}): {url}");
         }
 
         public async void RegisterTestCheck()
@@ -188,7 +189,8 @@ namespace BillingProvider.Core.KKMDrivers
                             price = 1.00,
                             quantity = 1.0,
                             sum = 1.00,
-                            payment_object = "commodity",
+                            payment_object = "service",
+                            payment_method = "full_payment",
                             vat = new
                             {
                                 type = "vat0"
@@ -199,7 +201,7 @@ namespace BillingProvider.Core.KKMDrivers
                     {
                         new
                         {
-                            type = 0,
+                            type = 1,
                             sum = 1.00
                         }
                     },
