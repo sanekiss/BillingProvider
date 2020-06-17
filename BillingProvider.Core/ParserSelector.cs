@@ -36,6 +36,12 @@ namespace BillingProvider.Core
                 return new CsvKbbParser(path);
             }
 
+            if (firstLine.Split(';').Length == 5)
+            {
+                Log.Debug("Select txtmail parser");
+                return new TxtMailParser(path);
+            }
+
             Log.Debug("Select CsvSberParser");
             return new CsvSberParser(path);
         }

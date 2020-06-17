@@ -25,6 +25,7 @@ namespace BillingProvider.Core.Parsers
                     for (var i = 1; i < result.Count; i++)
                     {
                         var x = result[i];
+                        Log.Debug($"{x[0]}, {x[1]}, {x[2]}; {x[3]}; {x[8]}; {x[7]}");
                         var tmp = new ClientInfo
                         {
                             Address = $"{x[0]}, дом {x[1]}, кв. {x[2]}",
