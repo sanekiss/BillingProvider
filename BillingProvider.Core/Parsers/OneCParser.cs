@@ -19,7 +19,7 @@ namespace BillingProvider.Core.Parsers
         {
             Data = new List<ClientInfo>();
             Path = path;
-            Captions = new List<string>()
+            Captions = new List<string>
             {
                 "ФИО", "Адрес", "Сумма", "Позиции"
             };
@@ -37,13 +37,13 @@ namespace BillingProvider.Core.Parsers
                 .ToList();
             foreach (var document in tmp0)
             {
-                Data.Add(new ClientInfo()
+                Data.Add(new ClientInfo
                 {
                     Name = document.PayerName,
                     Sum = document.Total.ToString(CultureInfo.InvariantCulture),
                     Positions = new List<Position>(new[]
                     {
-                        new Position()
+                        new Position
                         {
                             Name = document.PaymentPurpose,
                             Sum = document.Total.ToString(CultureInfo.InvariantCulture)

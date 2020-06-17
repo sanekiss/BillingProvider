@@ -42,6 +42,12 @@ namespace BillingProvider.Core
                 return new TxtMailParser(path);
             }
 
+            if (firstLine.Split('|').Length == 7)
+            {
+                Log.Debug("Select espsber parser");
+                return new EspSberParser(path);
+            }
+
             Log.Debug("Select CsvSberParser");
             return new CsvSberParser(path);
         }

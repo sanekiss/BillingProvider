@@ -15,7 +15,7 @@ namespace BillingProvider.Core.Parsers
         {
             Data = new List<ClientInfo>();
             Path = path;
-            Captions = new List<string>()
+            Captions = new List<string>
             {
                 "ФИО", "Адрес", "Сумма", "Позиции"
             };

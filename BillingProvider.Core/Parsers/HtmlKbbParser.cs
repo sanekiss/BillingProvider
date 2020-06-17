@@ -19,7 +19,7 @@ namespace BillingProvider.Core.Parsers
         {
             Path = path;
             Data = new List<ClientInfo>();
-            Captions = new List<string>()
+            Captions = new List<string>
             {
                 "ФИО", "Адрес", "Сумма", "Позиции"
             };
@@ -47,7 +47,7 @@ namespace BillingProvider.Core.Parsers
                 };
 
                 Log.Debug($"Read position: '{data[8]}; {data[7]}'");
-                info.Positions.Add(new Position()
+                info.Positions.Add(new Position
                 {
                     Name = data[8],
                     Sum = data[7]

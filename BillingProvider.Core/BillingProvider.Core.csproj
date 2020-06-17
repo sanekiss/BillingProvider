@@ -82,6 +82,7 @@
         <Compile Include="Parsers\BankTransfer\TransferDocument.cs" />
         <Compile Include="Parsers\CsvKbbParser.cs" />
         <Compile Include="Parsers\CsvSberParser.cs" />
+        <Compile Include="Parsers\EspSberParser.cs" />
         <Compile Include="Parsers\HtmlKbbParser.cs" />
         <Compile Include="Parsers\IParser.cs" />
         <Compile Include="Parsers\OneCParser.cs" />
