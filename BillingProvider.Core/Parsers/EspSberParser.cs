@@ -48,7 +48,7 @@ namespace BillingProvider.Core.Parsers
                         };
                         tmp.Positions.Add(new Position
                         {
-                            Name = $"Услуга {x[2]}",
+                            Name = "Вывоз ТКО",
                             Sum = x[3].ToString().Insert(x[3].ToString().Length-2, ".")
                         });
 

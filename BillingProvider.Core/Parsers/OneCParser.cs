@@ -45,7 +45,7 @@ namespace BillingProvider.Core.Parsers
                     {
                         new Position
                         {
-                            Name = document.PaymentPurpose,
+                            Name = "Вывоз ТКО",
                             Sum = document.Total.ToString(CultureInfo.InvariantCulture)
                         },
                     }),

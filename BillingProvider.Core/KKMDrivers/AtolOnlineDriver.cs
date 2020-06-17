@@ -60,8 +60,8 @@ namespace BillingProvider.Core.KKMDrivers
                 tmpStrings.Add(
                     new
                     {
-                        // name = t[0],
-                        name = "Вывоз ТКО",
+                        name = t[0],
+                        // name = "Вывоз ТКО",
                         price = decimal.Parse(t[1].Replace(".", ",")),
                         quantity = 1.0,
                         sum = decimal.Parse(t[1].Replace(".", ",")),

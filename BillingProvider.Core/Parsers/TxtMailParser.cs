@@ -39,7 +39,7 @@ namespace BillingProvider.Core.Parsers
                     for (var i = 0; i < result.Count; i++)
                     {
                         var x = result[i];
-                        Log.Debug($"{x[1]}; {x[2]}; Обращение с ТКО; {x[4]}");
+                        Log.Debug($"{x[1]}; {x[2]}; Вывоз ТКО; {x[4]}");
                         var tmp = new ClientInfo
                         {
                             Address = x[2].ToString(),
@@ -47,7 +47,7 @@ namespace BillingProvider.Core.Parsers
                         };
                         tmp.Positions.Add(new Position
                         {
-                            Name = "Обращение с ТКО",
+                            Name = "Вывоз ТКО",
                             Sum = x[4].ToString().Replace(",", ".")
                         });
 
