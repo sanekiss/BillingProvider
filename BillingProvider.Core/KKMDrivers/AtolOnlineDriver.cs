@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -40,10 +41,11 @@ namespace BillingProvider.Core.KKMDrivers
         public string Hostname { get; }
         public string CashierName { get; }
         public string CashierVatin { get; }
-        
+
         public string CompanyEmail { get; }
 
         private string Token { get; set; }
+        private DateTime TokenDate { get; set; }
 
         public async void RegisterCheck(string clientInfo, string name, string sum)
         {
@@ -58,7 +60,8 @@ namespace BillingProvider.Core.KKMDrivers
                 tmpStrings.Add(
                     new
                     {
-                        name = t[0],
+                        // name = t[0],
+                        name = "Вывоз ТКО",
                         price = decimal.Parse(t[1].Replace(".", ",")),
                         quantity = 1.0,
                         sum = decimal.Parse(t[1].Replace(".", ",")),
@@ -66,14 +69,15 @@ namespace BillingProvider.Core.KKMDrivers
                         payment_method = "full_payment",
                         vat = new
                         {
-                            type = "vat0"
+                            type = "none"
                         }
                     }
                 );
             }
 
             RestRequest request;
-            if (string.IsNullOrEmpty(Token))
+            if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)
+
             {
                 request = new RestRequest("getToken", Method.POST)
                 {
@@ -83,6 +87,7 @@ namespace BillingProvider.Core.KKMDrivers
                 request.AddBody(new {login = Login, pass = Password});
                 var res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
                 Token = res3.Data.Token;
+                TokenDate = DateTime.Parse(res3.Data.Timestamp) + TimeSpan.FromHours(24);
                 Log.Info($"Получен токен: {Token}");
             }
 
@@ -145,7 +150,7 @@ namespace BillingProvider.Core.KKMDrivers
         public async void RegisterTestCheck()
         {
             RestRequest request;
-            if (string.IsNullOrEmpty(Token))
+            if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)
             {
                 request = new RestRequest("getToken", Method.POST)
                 {
@@ -155,6 +160,7 @@ namespace BillingProvider.Core.KKMDrivers
                 request.AddBody(new {login = Login, pass = Password});
                 var res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
                 Token = res3.Data.Token;
+                TokenDate = DateTime.Parse(res3.Data.Timestamp) + TimeSpan.FromHours(24);
                 Log.Info($"Получен токен: {Token}");
             }
 
@@ -194,7 +200,7 @@ namespace BillingProvider.Core.KKMDrivers
                             payment_method = "full_payment",
                             vat = new
                             {
-                                type = "vat0"
+                                type = "none"
                             }
                         }
                     },
