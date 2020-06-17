@@ -11,19 +11,25 @@ namespace BillingProvider.Core
 
         public static IParser Select(string path)
         {
+            if (path.EndsWith("xlsx"))
+            {
+                Log.Debug("Select xlsx parser");
+                return new XlsxParser(path);
+            }
+
             var firstLine = File.ReadLines(path).First();
             if (firstLine == "1CClientBankExchange")
             {
                 Log.Debug("Select OneCParser");
                 return new OneCParser(path);
             }
-            
+
             if (firstLine.Contains("html"))
             {
                 Log.Debug("Select HtmlKbbParser");
                 return new HtmlKbbParser(path);
             }
-            
+
             if (firstLine.Contains("#"))
             {
                 Log.Debug("Select CsvKbbPareer");

@@ -125,7 +125,7 @@ namespace BillingProvider.Core.KKMDrivers
                 }
             );
             var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
-            Log.Info($"UUID чека: {res.Data.Uuid}");
+            Log.Info($"UUID чека для {clientInfo}: {res.Data.Uuid}");
             // Log.Info(
             //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
 
@@ -209,7 +209,7 @@ namespace BillingProvider.Core.KKMDrivers
                 }
             });
             var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
-            Log.Info($"UUID чека: {res.Data.Uuid}");
+            Log.Info($"UUID тестового чека: {res.Data.Uuid}");
             // Log.Info(
             //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
 
