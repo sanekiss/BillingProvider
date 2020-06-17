@@ -112,6 +112,7 @@ namespace BillingProvider.Core.KKMDrivers
                             payment_address = Hostname
                         },
                         items = tmpStrings.ToArray(),
+                        cashier = CashierName,
                         payments = new List<object>
                         {
                             new
@@ -197,6 +198,7 @@ namespace BillingProvider.Core.KKMDrivers
                             }
                         }
                     },
+                    cashier = CashierName,
                     payments = new List<object>
                     {
                         new
