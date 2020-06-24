@@ -1,6 +1,9 @@
 using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Drawing.Design;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using BillingProvider.WinForms.Extensions;
 using NLog;
 
@@ -116,6 +119,26 @@ namespace BillingProvider.WinForms
         
         #endregion
 
+
+        #region Watcher
+
+        [Category("Отслеживание папки")]
+        [Description("Путь до папки")]
+        [DisplayName("Папка")]
+        [Editor(typeof(FolderNameEditor), typeof(UITypeEditor))]
+        [RefreshProperties(RefreshProperties.All)]
+        public string FolderPath { get; set; }
+
+        
+        [Category("Отслеживание папки")]
+        [Description("Сканирование подпапок на наличие изменений")]
+        [DisplayName("Включая подпапки")]
+        [TypeConverter(typeof(BooleanToYesNoTypeConverter))]
+        [RefreshProperties(RefreshProperties.All)]
+        public bool IncludeSubfolders { get; set; }
+        
+        #endregion
+
         public AppSettings()
         {
             Log.Debug("Begin app settings loading");
@@ -158,7 +181,13 @@ namespace BillingProvider.WinForms
                 Log.Trace($"{nameof(CashierVatin)}='{CashierVatin}'");
 
                 CompanyMail = ConfigurationManager.AppSettings[$"{nameof(CompanyMail)}"];
-                Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");
+                Log.Trace($"{nameof(CompanyMail)}='{CompanyMail}'");           
+                
+                FolderPath = ConfigurationManager.AppSettings[$"{nameof(FolderPath)}"];
+                Log.Trace($"{nameof(FolderPath)}='{FolderPath}'");
+
+                IncludeSubfolders = Convert.ToBoolean(ConfigurationManager.AppSettings[$"{nameof(IncludeSubfolders)}"]);
+                Log.Trace($"{nameof(IncludeSubfolders)}='{IncludeSubfolders}'");
 
                 Check();
             }
@@ -227,6 +256,12 @@ namespace BillingProvider.WinForms
             configuration.AppSettings.Settings[nameof(ServerDeviceId)].Value = ServerDeviceId.ToString();
             Log.Trace($"{nameof(ServerDeviceId)}='{ServerDeviceId}'");
 
+            configuration.AppSettings.Settings[nameof(FolderPath)].Value = FolderPath;
+            Log.Trace($"{nameof(FolderPath)}='{FolderPath}'");
+            
+            configuration.AppSettings.Settings[nameof(IncludeSubfolders)].Value = IncludeSubfolders.ToString();
+            Log.Trace($"{nameof(IncludeSubfolders)}='{IncludeSubfolders}'");
+            
 
             configuration.Save(ConfigurationSaveMode.Full, true);
             ConfigurationManager.RefreshSection("appSettings");

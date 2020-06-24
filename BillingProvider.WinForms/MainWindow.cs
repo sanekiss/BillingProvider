@@ -2,6 +2,9 @@
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BillingProvider.Core;
@@ -21,10 +24,18 @@ namespace BillingProvider.WinForms
         // private ServerConnection _conn;
         private IKkmDriver _conn;
 
+        private readonly StringBuilder _sbLog;
+        private bool _logDirty;
+        private FileSystemWatcher _watcher;
+        private bool _isWatching;
+
 
         public MainWindow()
         {
             InitializeComponent();
+            _sbLog = new StringBuilder();
+            _logDirty = false;
+            _isWatching = false;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -249,6 +260,62 @@ namespace BillingProvider.WinForms
         {
             Process.Start(e.LinkText);
             Log.Debug($"{e.LinkText} clicked");
+        }
+
+        private void WatchFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_isWatching)
+            {
+                _isWatching = false;
+                _watcher.EnableRaisingEvents = false;
+                _watcher.Dispose();
+                WatchFolderToolStripMenuItem.Text = @"Отслеживать папку";
+            }
+            else
+            {
+                _isWatching = true;
+                WatchFolderToolStripMenuItem.Text = @"Прекратить отслеживание";
+
+                _watcher = new FileSystemWatcher
+                {
+                    Filter = "*.*",
+                    Path = _appSettings.FolderPath,
+                    IncludeSubdirectories = _appSettings.IncludeSubfolders,
+                    NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName,
+                                   EnableRaisingEvents = true
+                };
+
+
+                _watcher.Changed += OnChanged;
+                _watcher.Created += OnChanged;
+            }
+        }
+
+        private void OnChanged(object sender, FileSystemEventArgs e)
+        {
+            if (_logDirty)
+            {
+                return;
+            }
+
+            _sbLog.Remove(0, _sbLog.Length);
+            _sbLog.Append(e.FullPath);
+            _sbLog.Append(" ");
+            _sbLog.Append(e.ChangeType.ToString());
+            _sbLog.Append("    ");
+            _sbLog.Append(DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            _logDirty = true;
+        }
+
+        private void tmrEditNotify_Tick(object sender, EventArgs e)
+        {
+            if (!_logDirty)
+            {
+                return;
+            }
+
+            _log.Info(_sbLog.ToString());
+            _logDirty = false;
         }
     }
 }

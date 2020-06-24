@@ -29,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,6 +45,8 @@
             this.KktStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TestCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.WatchFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.FiscalAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +56,7 @@
             this.gridSource = new System.Windows.Forms.DataGridView();
             this.rtxtLog = new System.Windows.Forms.RichTextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tmrEditNotify = new System.Windows.Forms.Timer(this.components);
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -130,7 +134,7 @@
             // 
             // сервисToolStripMenuItem
             // 
-            this.сервисToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.PingToolStripMenuItem, this.DeviceListToolStripMenuItem, this.KktStateToolStripMenuItem, this.TestCheckToolStripMenuItem, this.toolStripSeparator6, this.FiscalAllToolStripMenuItem});
+            this.сервисToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.PingToolStripMenuItem, this.DeviceListToolStripMenuItem, this.KktStateToolStripMenuItem, this.TestCheckToolStripMenuItem, this.toolStripSeparator6, this.WatchFolderToolStripMenuItem, this.toolStripSeparator2, this.FiscalAllToolStripMenuItem});
             this.сервисToolStripMenuItem.Name = "сервисToolStripMenuItem";
             this.сервисToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.сервисToolStripMenuItem.Text = "&Сервис";
@@ -167,6 +171,18 @@
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(178, 6);
+            // 
+            // WatchFolderToolStripMenuItem
+            // 
+            this.WatchFolderToolStripMenuItem.Name = "WatchFolderToolStripMenuItem";
+            this.WatchFolderToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.WatchFolderToolStripMenuItem.Text = "Отслеживать папку";
+            this.WatchFolderToolStripMenuItem.Click += new System.EventHandler(this.WatchFolderToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
             // 
             // FiscalAllToolStripMenuItem
             // 
@@ -237,7 +253,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 320;
+            this.splitContainer2.SplitterDistance = 329;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -251,7 +267,7 @@
             this.gridSource.Name = "gridSource";
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 320);
+            this.gridSource.Size = new System.Drawing.Size(408, 329);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -260,10 +276,15 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 139);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 130);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
+            // 
+            // tmrEditNotify
+            // 
+            this.tmrEditNotify.Enabled = true;
+            this.tmrEditNotify.Tick += new System.EventHandler(this.tmrEditNotify_Tick);
             // 
             // MainWindow
             // 
@@ -310,9 +331,12 @@
         private System.Windows.Forms.ToolStripMenuItem SaveToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStripMenuItem TestCheckToolStripMenuItem;
+        private System.Windows.Forms.Timer tmrEditNotify;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem WatchFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem выходToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сервисToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;

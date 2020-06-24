@@ -56,6 +56,7 @@
         <Reference Include="System" />
         <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
+        <Reference Include="System.Design" />
         <Reference Include="System.IO.Compression" />
         <Reference Include="System.Runtime.Serialization" />
         <Reference Include="System.ServiceModel" />
@@ -71,6 +72,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Extensions\BooleanToYesNoTypeConverter.cs" />
         <Compile Include="MainWindow.cs">
             <SubType>Form</SubType>
         </Compile>
