@@ -53,7 +53,7 @@ namespace BillingProvider.Core.Parsers
                     Log.Debug($"Add default position: 'Утилизация ТКО+{row[3]}'");
                     tmp.Positions.Add(new Position
                     {
-                        Name = "Утилизация ТКО",
+                        Name = "Вывоз ТКО",
                         Sum = row[3].Replace(",", ".")
                     });
 

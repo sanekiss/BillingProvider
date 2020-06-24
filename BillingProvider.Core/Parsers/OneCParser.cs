@@ -45,12 +45,11 @@ namespace BillingProvider.Core.Parsers
                     {
                         new Position
                         {
-                            Name = "Вывоз ТКО",
+                            Name = document.PaymentPurpose,
                             Sum = document.Total.ToString(CultureInfo.InvariantCulture)
                         },
                     }),
                     Address = string.Empty
-                        
                 });
             }
 
