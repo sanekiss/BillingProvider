@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using BillingProvider.Core.Parsers;
@@ -48,8 +49,13 @@ namespace BillingProvider.Core
                 return new EspSberParser(path);
             }
 
-            Log.Debug("Select CsvSberParser");
-            return new CsvSberParser(path);
+            if (firstLine.Length < 10)
+            {
+                Log.Debug("Select CsvSberParser");
+                return new CsvSberParser(path);
+            }
+            
+            throw new ArgumentException();
         }
     }
 }

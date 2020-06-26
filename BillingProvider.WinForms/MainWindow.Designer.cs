@@ -57,6 +57,7 @@
             this.rtxtLog = new System.Windows.Forms.RichTextBox();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tmrEditNotify = new System.Windows.Forms.Timer(this.components);
+            this.tmrQueue = new System.Windows.Forms.Timer(this.components);
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -253,7 +254,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 329;
+            this.splitContainer2.SplitterDistance = 331;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -267,7 +268,7 @@
             this.gridSource.Name = "gridSource";
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 329);
+            this.gridSource.Size = new System.Drawing.Size(408, 331);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -276,7 +277,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 130);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 128);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
@@ -285,6 +286,11 @@
             // 
             this.tmrEditNotify.Enabled = true;
             this.tmrEditNotify.Tick += new System.EventHandler(this.tmrEditNotify_Tick);
+            // 
+            // tmrQueue
+            // 
+            this.tmrQueue.Interval = 2500;
+            this.tmrQueue.Tick += new System.EventHandler(this.tmrQueue_Tick);
             // 
             // MainWindow
             // 
@@ -332,6 +338,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStripMenuItem TestCheckToolStripMenuItem;
         private System.Windows.Forms.Timer tmrEditNotify;
+        private System.Windows.Forms.Timer tmrQueue;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;

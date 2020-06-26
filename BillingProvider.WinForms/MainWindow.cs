@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,9 +25,11 @@ namespace BillingProvider.WinForms
         private IKkmDriver _conn;
 
         private readonly StringBuilder _sbLog;
+        private string _filePath;
         private bool _logDirty;
         private FileSystemWatcher _watcher;
         private bool _isWatching;
+        private string _folderName;
 
 
         public MainWindow()
@@ -45,6 +47,7 @@ namespace BillingProvider.WinForms
             // DeviceListToolStripMenuItem.Enabled = false;
 
             _log = LogManager.GetCurrentClassLogger();
+
             _appSettings = new AppSettings();
             gridSettings.SelectedObject = _appSettings;
             if (_appSettings.KkmDriver == AppSettings.KkmDrivers.atol)
@@ -105,8 +108,9 @@ namespace BillingProvider.WinForms
             foreach (var node in parser.Data)
             {
                 dt.LoadDataRow(node.AsArray(), LoadOption.Upsert);
-                gridSource.Update();
             }
+
+            gridSource.Update();
         }
 
         private bool _changed;
@@ -270,28 +274,31 @@ namespace BillingProvider.WinForms
                 _watcher.EnableRaisingEvents = false;
                 _watcher.Dispose();
                 WatchFolderToolStripMenuItem.Text = @"Отслеживать папку";
+                _log.Info($"Отслеживание папки заверешено {_folderName}");
             }
             else
             {
+                _folderName = _appSettings.FolderPath;
                 _isWatching = true;
                 WatchFolderToolStripMenuItem.Text = @"Прекратить отслеживание";
 
                 _watcher = new FileSystemWatcher
                 {
                     Filter = "*.*",
-                    Path = _appSettings.FolderPath,
+                    Path = _folderName,
                     IncludeSubdirectories = _appSettings.IncludeSubfolders,
                     NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName,
-                                   EnableRaisingEvents = true
+                    EnableRaisingEvents = true
                 };
 
 
-                _watcher.Changed += OnChanged;
-                _watcher.Created += OnChanged;
+                _watcher.Created += OnCreated;
+
+                _log.Info($"Начато отслеживание папки {_folderName}");
             }
         }
 
-        private void OnChanged(object sender, FileSystemEventArgs e)
+        private void OnCreated(object sender, FileSystemEventArgs e)
         {
             if (_logDirty)
             {
@@ -299,15 +306,16 @@ namespace BillingProvider.WinForms
             }
 
             _sbLog.Remove(0, _sbLog.Length);
-            _sbLog.Append(e.FullPath);
-            _sbLog.Append(" ");
             _sbLog.Append(e.ChangeType.ToString());
-            _sbLog.Append("    ");
-            _sbLog.Append(DateTime.Now.ToString(CultureInfo.InvariantCulture));
+            _sbLog.Append(" ");
+            _sbLog.Append(e.FullPath);
+            _filePath = e.FullPath;
+
+
             _logDirty = true;
         }
 
-        private void tmrEditNotify_Tick(object sender, EventArgs e)
+        private async void tmrEditNotify_Tick(object sender, EventArgs e)
         {
             if (!_logDirty)
             {
@@ -316,6 +324,54 @@ namespace BillingProvider.WinForms
 
             _log.Info(_sbLog.ToString());
             _logDirty = false;
+
+            try
+            {
+                var parser = ParserSelector.Select(_filePath);
+                await Task.Run(() => parser.Load());
+                foreach (var node in parser.Data)
+                {
+                    _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
+                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, String.Empty, node.Sum));
+                }
+
+                if (!tmrQueue.Enabled)
+                {
+                    tmrQueue.Start();
+                }
+            }
+            catch
+            {
+                Log.Error($"Не удалось открыть файл: {_filePath}");
+            }
+        }
+
+        private void ExecuteTask(string clientInfo, string name, string sum)
+        {
+            _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
+
+            try
+            {
+                _conn.RegisterCheck(clientInfo, name, sum);
+            }
+            catch
+            {
+                _log.Warn($"Строку с {name}, {sum} не удалось обработать");
+            }
+        }
+
+        private readonly Queue<Action> _taskQueue = new Queue<Action>();
+
+        private void tmrQueue_Tick(object sender, EventArgs e)
+        {
+            if (_taskQueue.Count == 0)
+            {
+                tmrQueue.Stop();
+                return;
+            }
+           
+            Task.Factory.StartNew(_taskQueue.Dequeue());
+            _log.Info($"Позиций в очереди: {_taskQueue.Count}");
         }
     }
 }

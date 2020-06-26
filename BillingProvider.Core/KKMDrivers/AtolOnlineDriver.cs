@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -57,6 +56,11 @@ namespace BillingProvider.Core.KKMDrivers
             foreach (var str in checkStrings)
             {
                 var t = str.Split('+');
+                if (t.Length < 2)
+                {
+                    t = new[] {"Вывоз ТКО", sum};
+                }
+
                 tmpStrings.Add(
                     new
                     {
@@ -131,10 +135,14 @@ namespace BillingProvider.Core.KKMDrivers
                 }
             );
             var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
-            Log.Info($"UUID чека для {clientInfo}: {res.Data.Uuid}");
+            Log.Info($"UUID чека для {clientInfo}: {res.Data?.Uuid ?? res.Content}");
             // Log.Info(
             //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
 
+            if (res?.Data?.Uuid == null)
+            {
+                return;
+            }
             var req = new RestRequest($"{GroupId}/report/{res.Data.Uuid}", Method.GET)
             {
                 RequestFormat = DataFormat.Json
