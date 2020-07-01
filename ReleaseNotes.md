@@ -1,1 +1,1 @@
-# Billing Provider v0.2.8\n\n- Fix CsvKbbParser\n
+# Billing Provider v0.3.0\n
