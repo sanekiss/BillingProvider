@@ -21,7 +21,7 @@ init:
 
 branches:
   only:
-    - master
+    - v0.*
 
 clone_folder: c:\BillingProvider
 shallow_clone: true
