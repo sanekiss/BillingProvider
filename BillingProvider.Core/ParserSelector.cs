@@ -12,7 +12,7 @@ namespace BillingProvider.Core
 
         public static IParser Select(string path)
         {
-            if (path.EndsWith("xlsx"))
+            if (path.EndsWith("xlsx") || path.EndsWith("xls"))
             {
                 Log.Debug("Select xlsx parser");
                 return new XlsxParser(path);

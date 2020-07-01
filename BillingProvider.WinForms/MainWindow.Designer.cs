@@ -31,6 +31,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CreateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,6 +61,7 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tmrEditNotify = new System.Windows.Forms.Timer(this.components);
             this.tmrQueue = new System.Windows.Forms.Timer(this.components);
+            this.ScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -135,7 +139,7 @@
             // 
             // сервисToolStripMenuItem
             // 
-            this.сервисToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.PingToolStripMenuItem, this.DeviceListToolStripMenuItem, this.KktStateToolStripMenuItem, this.TestCheckToolStripMenuItem, this.toolStripSeparator6, this.WatchFolderToolStripMenuItem, this.toolStripSeparator2, this.FiscalAllToolStripMenuItem});
+            this.сервисToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {this.PingToolStripMenuItem, this.DeviceListToolStripMenuItem, this.KktStateToolStripMenuItem, this.TestCheckToolStripMenuItem, this.toolStripSeparator6, this.ScanToolStripMenuItem, this.WatchFolderToolStripMenuItem, this.toolStripSeparator2, this.FiscalAllToolStripMenuItem});
             this.сервисToolStripMenuItem.Name = "сервисToolStripMenuItem";
             this.сервисToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.сервисToolStripMenuItem.Text = "&Сервис";
@@ -143,52 +147,52 @@
             // PingToolStripMenuItem
             // 
             this.PingToolStripMenuItem.Name = "PingToolStripMenuItem";
-            this.PingToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.PingToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.PingToolStripMenuItem.Text = "Ping сервера";
             this.PingToolStripMenuItem.Click += new System.EventHandler(this.PingToolStripMenuItem_Click);
             // 
             // DeviceListToolStripMenuItem
             // 
             this.DeviceListToolStripMenuItem.Name = "DeviceListToolStripMenuItem";
-            this.DeviceListToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.DeviceListToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.DeviceListToolStripMenuItem.Text = "Список устройств";
             this.DeviceListToolStripMenuItem.Click += new System.EventHandler(this.DeviceListToolStripMenuItem_Click);
             // 
             // KktStateToolStripMenuItem
             // 
             this.KktStateToolStripMenuItem.Name = "KktStateToolStripMenuItem";
-            this.KktStateToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.KktStateToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.KktStateToolStripMenuItem.Text = "Состояние ККТ";
             this.KktStateToolStripMenuItem.Click += new System.EventHandler(this.KktStateToolStripMenuItem_Click);
             // 
             // TestCheckToolStripMenuItem
             // 
             this.TestCheckToolStripMenuItem.Name = "TestCheckToolStripMenuItem";
-            this.TestCheckToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.TestCheckToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.TestCheckToolStripMenuItem.Text = "Чек на 1 рубль";
             this.TestCheckToolStripMenuItem.Click += new System.EventHandler(this.TestCheckToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(178, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(203, 6);
             // 
             // WatchFolderToolStripMenuItem
             // 
             this.WatchFolderToolStripMenuItem.Name = "WatchFolderToolStripMenuItem";
-            this.WatchFolderToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.WatchFolderToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.WatchFolderToolStripMenuItem.Text = "Отслеживать папку";
             this.WatchFolderToolStripMenuItem.Click += new System.EventHandler(this.WatchFolderToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(178, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(203, 6);
             // 
             // FiscalAllToolStripMenuItem
             // 
             this.FiscalAllToolStripMenuItem.Name = "FiscalAllToolStripMenuItem";
-            this.FiscalAllToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.FiscalAllToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.FiscalAllToolStripMenuItem.Text = "Отправить на кассу";
             this.FiscalAllToolStripMenuItem.Click += new System.EventHandler(this.FiscalAllToolStripMenuItem_Click);
             // 
@@ -254,7 +258,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 331;
+            this.splitContainer2.SplitterDistance = 332;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -262,13 +266,37 @@
             // 
             this.gridSource.AllowUserToResizeRows = false;
             this.gridSource.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridSource.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.gridSource.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gridSource.DefaultCellStyle = dataGridViewCellStyle2;
             this.gridSource.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridSource.Location = new System.Drawing.Point(0, 0);
             this.gridSource.Name = "gridSource";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 331);
+            this.gridSource.Size = new System.Drawing.Size(408, 332);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -277,7 +305,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 128);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 127);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
@@ -291,6 +319,13 @@
             // 
             this.tmrQueue.Interval = 2500;
             this.tmrQueue.Tick += new System.EventHandler(this.tmrQueue_Tick);
+            // 
+            // ScanToolStripMenuItem
+            // 
+            this.ScanToolStripMenuItem.Name = "ScanToolStripMenuItem";
+            this.ScanToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.ScanToolStripMenuItem.Text = "Пересканировать папку";
+            this.ScanToolStripMenuItem.Click += new System.EventHandler(this.ScanToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -335,6 +370,7 @@
         private System.Windows.Forms.ToolStripMenuItem PingToolStripMenuItem;
         private System.Windows.Forms.RichTextBox rtxtLog;
         private System.Windows.Forms.ToolStripMenuItem SaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ScanToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ToolStripMenuItem TestCheckToolStripMenuItem;
         private System.Windows.Forms.Timer tmrEditNotify;

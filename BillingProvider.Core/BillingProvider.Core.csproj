@@ -69,6 +69,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="FileStorage.cs" />
         <Compile Include="KKMDrivers\AtolOnlineDriver.cs" />
         <Compile Include="KKMDrivers\IKKMDriver.cs" />
         <Compile Include="KKMDrivers\KKMServerDriver.cs" />

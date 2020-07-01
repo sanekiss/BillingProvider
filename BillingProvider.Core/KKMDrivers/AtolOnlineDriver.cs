@@ -143,6 +143,7 @@ namespace BillingProvider.Core.KKMDrivers
             {
                 return;
             }
+
             var req = new RestRequest($"{GroupId}/report/{res.Data.Uuid}", Method.GET)
             {
                 RequestFormat = DataFormat.Json

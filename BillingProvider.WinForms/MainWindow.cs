@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,6 +31,7 @@ namespace BillingProvider.WinForms
         private FileSystemWatcher _watcher;
         private bool _isWatching;
         private string _folderName;
+        private FileStorage _storage;
 
 
         public MainWindow()
@@ -62,12 +64,15 @@ namespace BillingProvider.WinForms
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
                     _appSettings.ServerPort, _appSettings.CompanyMail);
             }
+            
 
             _log.Debug("MainWindow loaded");
             CreateToolStripMenuItem_Click(sender, e);
             _log.Info("Приложение запущено!");
+            _storage = new FileStorage(@"history.txt");
+            _storage.Load();
+            
         }
-
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -325,6 +330,24 @@ namespace BillingProvider.WinForms
             _log.Info(_sbLog.ToString());
             _logDirty = false;
 
+            string hash;
+            using (var md5 = MD5.Create())
+            {
+                using (var stream = File.OpenRead(_filePath))
+                {
+                    hash = BitConverter.ToString(md5.ComputeHash(stream))
+                        .Replace("-", "")
+                        .ToLowerInvariant();
+                }
+            }
+            
+            _log.Info($"Hash of {_filePath}: {hash}");
+            if (_storage.IsExists(hash))
+            {
+                _log.Info($"Файл {_filePath} уже обработан");
+                return;
+            }
+            
             try
             {
                 var parser = ParserSelector.Select(_filePath);
@@ -369,9 +392,56 @@ namespace BillingProvider.WinForms
                 tmrQueue.Stop();
                 return;
             }
-           
+
             Task.Factory.StartNew(_taskQueue.Dequeue());
             _log.Info($"Позиций в очереди: {_taskQueue.Count}");
+        }
+
+        private async void ScanToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (var file in Directory.EnumerateFiles(_appSettings.FolderPath, "*.*", SearchOption.AllDirectories))
+            {
+                _log.Info($"Select file: {file}");
+                string hash;
+                using (var md5 = MD5.Create())
+                {
+                    using (var stream = File.OpenRead(file))
+                    {
+                        hash = BitConverter.ToString(md5.ComputeHash(stream))
+                            .Replace("-", "")
+                            .ToLowerInvariant();
+                    }
+                }
+
+                _log.Info($"Hash of {file}: {hash}");
+                if (_storage.IsExists(hash))
+                {
+                    _log.Info($"Файл {file} уже обработан");
+                    continue;
+                }
+                
+                try
+                {
+                    var parser = ParserSelector.Select(file);
+                    await Task.Run(() => parser.Load());
+                    foreach (var node in parser.Data)
+                    {
+                        _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
+                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum));
+                    }
+
+                    if (!tmrQueue.Enabled)
+                    {
+                        tmrQueue.Start();
+                    }
+                    _storage.AddNode(hash);
+
+                }
+                catch
+                {
+                    Log.Error($"Не удалось открыть файл: {_filePath}");
+                }
+            }
         }
     }
 }
