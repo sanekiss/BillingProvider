@@ -62,5 +62,5 @@ deploy:
   artifact: zip
   skip_tags: true
   on:
-    branch: master
+    branch: /v0.*/
     appveyor_repo_tag: true
