@@ -7,14 +7,14 @@ using NLog;
 
 namespace BillingProvider.Core.Parsers
 {
-    public class EspSberParser : IParser
+    public class SpecSberParserTwo : IParser
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         public List<ClientInfo> Data { get; }
         public List<string> Captions { get; }
         public string Path { get; }
 
-        public EspSberParser(string path)
+        public SpecSberParserTwo(string path)
         {
             Data = new List<ClientInfo>();
             Path = path;
@@ -26,39 +26,44 @@ namespace BillingProvider.Core.Parsers
 
         public void Load()
         {
-            Log.Debug("Begin espsber parsing");
+            Log.Debug("Begin specsbertwo parsing");
             using (var stream = File.Open(Path, FileMode.Open, FileAccess.Read))
             {
                 using (var reader = ExcelReaderFactory.CreateCsvReader(stream, new ExcelReaderConfiguration
                 {
                     FallbackEncoding = Encoding.GetEncoding(1251),
-                    AutodetectSeparators = new[] {'|'}
+                    AutodetectSeparators = new[] {';'}
                 }))
                 {
                     var result = reader.AsDataSet().Tables[0].Rows;
-                    for (var i = 0; i < result.Count - 1; i++)
+                    for (var i = 0; i < result.Count; i++)
                     {
                         var x = result[i];
-                        Log.Debug($"{x[1]}; {x[2]}; Обращение с ТКО; {x[4]}");
+                        Log.Debug($"{x[6]}; {x[7]}; Вывоз ТКО; {x[16]}");
+                        if (string.IsNullOrEmpty(x[16].ToString()) || string.IsNullOrEmpty(x[6].ToString()))
+                        {
+                            continue;
+                        }
+
                         var tmp = new ClientInfo
                         {
-                            Address = x[1].ToString(),
-                            Name = x[1].ToString(),
+                            Address = x[7].ToString(),
+                            Name = x[6].ToString(),
                         };
                         tmp.Positions.Add(new Position
                         {
                             Name = "Вывоз ТКО",
-                            Sum = x[3].ToString().Insert(x[3].ToString().Length-2, ".")
+                            Sum = x[16].ToString().Replace(",", ".")
                         });
 
-                        tmp.Sum = x[3].ToString().Insert(x[3].ToString().Length - 2, ".");
-                        
+                        tmp.Sum = x[16].ToString().Replace(",", ".");
+
                         Data.Add(tmp);
                     }
                 }
             }
 
-            Log.Debug("End espsber parsing");
+            Log.Debug("End sberspectwo parsing");
             Log.Info($"Файл {Path} успешно загружен");
         }
     }

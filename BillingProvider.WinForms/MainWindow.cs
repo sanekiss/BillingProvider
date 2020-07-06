@@ -64,14 +64,13 @@ namespace BillingProvider.WinForms
                     _appSettings.ServerPassword, _appSettings.ServerLogin, _appSettings.ServerAddress,
                     _appSettings.ServerPort, _appSettings.CompanyMail);
             }
-            
+
 
             _log.Debug("MainWindow loaded");
             CreateToolStripMenuItem_Click(sender, e);
             _log.Info("Приложение запущено!");
             _storage = new FileStorage(@"history.txt");
             _storage.Load();
-            
         }
 
         private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -85,37 +84,37 @@ namespace BillingProvider.WinForms
             }
 
             _log.Info($"Выбран файл: {openFileDialog.FileName}");
-            Text = $@"{openFileDialog.FileName} - Billing Provider";
-
-            var parser = ParserSelector.Select(openFileDialog.FileName);
-            try
-            {
-                parser.Load();
-            }
-            catch
-            {
-                Log.Error($"Не удалось открыть файл: {openFileDialog.FileName}");
-            }
-
-
             var dt = new DataTable();
             gridSource.DataSource = dt;
 
-            _log.Debug($"Добавление колонок в {nameof(gridSource)}");
-            foreach (var caption in parser.Captions)
+            IParser parser;
+            try
             {
-                dt.Columns.Add(caption, typeof(string));
+                parser = ParserSelector.Select(openFileDialog.FileName);
+                parser.Load();
+                Text = $@"{openFileDialog.FileName} - Billing Provider";
+                _log.Debug($"Добавление колонок в {nameof(gridSource)}");
+                foreach (var caption in parser.Captions)
+                {
+                    dt.Columns.Add(caption, typeof(string));
+                }
+
+                gridSource.Update();
+
+                _log.Debug($"Добавление данных в {nameof(gridSource)}");
+                foreach (var node in parser.Data)
+                {
+                    dt.LoadDataRow(node.AsArray(), LoadOption.Upsert);
+                }
+
+                gridSource.Update();
             }
-
-            gridSource.Update();
-
-            _log.Debug($"Добавление данных в {nameof(gridSource)}");
-            foreach (var node in parser.Data)
+            catch
             {
-                dt.LoadDataRow(node.AsArray(), LoadOption.Upsert);
-            }
+                _log.Error($"Не удалось открыть файл: {openFileDialog.FileName}");
+                Text = @"Billing Provider";
 
-            gridSource.Update();
+            }
         }
 
         private bool _changed;
@@ -340,14 +339,14 @@ namespace BillingProvider.WinForms
                         .ToLowerInvariant();
                 }
             }
-            
+
             _log.Info($"Hash of {_filePath}: {hash}");
             if (_storage.IsExists(hash))
             {
                 _log.Info($"Файл {_filePath} уже обработан");
                 return;
             }
-            
+
             try
             {
                 var parser = ParserSelector.Select(_filePath);
@@ -419,7 +418,7 @@ namespace BillingProvider.WinForms
                     _log.Info($"Файл {file} уже обработан");
                     continue;
                 }
-                
+
                 try
                 {
                     var parser = ParserSelector.Select(file);
@@ -434,8 +433,8 @@ namespace BillingProvider.WinForms
                     {
                         tmrQueue.Start();
                     }
-                    _storage.AddNode(hash);
 
+                    _storage.AddNode(hash);
                 }
                 catch
                 {

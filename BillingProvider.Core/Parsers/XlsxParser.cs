@@ -24,24 +24,31 @@ namespace BillingProvider.Core.Parsers
                     var result = reader.AsDataSet().Tables[0].Rows;
                     for (var i = 1; i < result.Count; i++)
                     {
-                        var x = result[i];
-                        Log.Debug($"{x[0]}, {x[1]}, {x[2]}; {x[3]}; {x[8]}; {x[7]}");
-                        var tmp = new ClientInfo
+                        try
                         {
-                            Address = $"{x[0]}, дом {x[1]}, кв. {x[2]}",
-                            Name = x[3].ToString(),
-                        };
-                        tmp.Positions.Add(new Position
+                            var x = result[i];
+                            Log.Debug($"{x[0]}, {x[1]}, {x[2]}; {x[3]}; {x[8]}; {x[7]}");
+                            var tmp = new ClientInfo
+                            {
+                                Address = $"{x[0]}, дом {x[1]}, кв. {x[2]}",
+                                Name = x[3].ToString(),
+                            };
+                            tmp.Positions.Add(new Position
+                            {
+                                // Name = x[8].ToString(),
+                                Name = "Вывоз ТКО",
+                                Sum = x[7].ToString().Replace(",", ".")
+                            });
+
+                            Log.Debug($"Read sum: '{x[7]}'");
+                            tmp.Sum = x[7].ToString().Replace(",", ".");
+
+                            Data.Add(tmp);
+                        }
+                        catch
                         {
-                            // Name = x[8].ToString(),
-                            Name = "Вывоз ТКО",
-                            Sum = x[7].ToString().Replace(",", ".")
-                        });
-
-                        Log.Debug($"Read sum: '{x[7]}'");
-                        tmp.Sum = x[7].ToString().Replace(",", ".");
-
-                        Data.Add(tmp);
+                            continue;
+                        }
                     }
                 }
             }
