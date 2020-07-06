@@ -48,6 +48,7 @@
             this.KktStateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TestCheckToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.ScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.WatchFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.FiscalAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,7 +62,6 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.tmrEditNotify = new System.Windows.Forms.Timer(this.components);
             this.tmrQueue = new System.Windows.Forms.Timer(this.components);
-            this.ScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.MainSplitontainer)).BeginInit();
             this.MainSplitontainer.Panel1.SuspendLayout();
@@ -177,6 +177,13 @@
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(203, 6);
             // 
+            // ScanToolStripMenuItem
+            // 
+            this.ScanToolStripMenuItem.Name = "ScanToolStripMenuItem";
+            this.ScanToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.ScanToolStripMenuItem.Text = "Пересканировать папку";
+            this.ScanToolStripMenuItem.Click += new System.EventHandler(this.ScanToolStripMenuItem_Click);
+            // 
             // WatchFolderToolStripMenuItem
             // 
             this.WatchFolderToolStripMenuItem.Name = "WatchFolderToolStripMenuItem";
@@ -258,7 +265,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.rtxtLog);
             this.splitContainer2.Size = new System.Drawing.Size(408, 462);
-            this.splitContainer2.SplitterDistance = 332;
+            this.splitContainer2.SplitterDistance = 333;
             this.splitContainer2.SplitterWidth = 3;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -296,7 +303,7 @@
             this.gridSource.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSource.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.gridSource.ShowCellErrors = false;
-            this.gridSource.Size = new System.Drawing.Size(408, 332);
+            this.gridSource.Size = new System.Drawing.Size(408, 333);
             this.gridSource.TabIndex = 0;
             // 
             // rtxtLog
@@ -305,7 +312,7 @@
             this.rtxtLog.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.rtxtLog.Location = new System.Drawing.Point(0, 0);
             this.rtxtLog.Name = "rtxtLog";
-            this.rtxtLog.Size = new System.Drawing.Size(408, 127);
+            this.rtxtLog.Size = new System.Drawing.Size(408, 126);
             this.rtxtLog.TabIndex = 0;
             this.rtxtLog.Text = "";
             this.rtxtLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtxtLog_LinkClicked);
@@ -319,13 +326,6 @@
             // 
             this.tmrQueue.Interval = 2500;
             this.tmrQueue.Tick += new System.EventHandler(this.tmrQueue_Tick);
-            // 
-            // ScanToolStripMenuItem
-            // 
-            this.ScanToolStripMenuItem.Name = "ScanToolStripMenuItem";
-            this.ScanToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.ScanToolStripMenuItem.Text = "Пересканировать папку";
-            this.ScanToolStripMenuItem.Click += new System.EventHandler(this.ScanToolStripMenuItem_Click);
             // 
             // MainWindow
             // 

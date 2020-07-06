@@ -85,6 +85,7 @@
         <Compile Include="Parsers\HtmlKbbParser.cs" />
         <Compile Include="Parsers\IParser.cs" />
         <Compile Include="Parsers\OneCParser.cs" />
+        <Compile Include="Parsers\OneCXlsxParser.cs" />
         <Compile Include="Parsers\SpecSberParser.cs" />
         <Compile Include="Parsers\SpecSberParserThree.cs" />
         <Compile Include="Parsers\SpecSberParserTwo.cs" />
