@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -46,7 +47,7 @@ namespace BillingProvider.Core.KKMDrivers
         private string Token { get; set; }
         private DateTime TokenDate { get; set; }
 
-        public async void RegisterCheck(string clientInfo, string name, string sum)
+        public async void RegisterCheck(string clientInfo, string name, string sum, string filePath)
         {
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
@@ -101,10 +102,27 @@ namespace BillingProvider.Core.KKMDrivers
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddHeader("Token", Token);
+
+            var dt = DateTime.Now;
+            try
+            {
+                if (Regex.IsMatch(filePath, @"\d+\\\d+\\\d+"))
+                {
+                    var match = Regex.Match(filePath, @"\d+\\\d+\\\d+").ToString().Split('\\');
+                    dt = new DateTime(int.Parse(match[0]), int.Parse(match[1]), int.Parse(match[2]), 09, 30, 00);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Info("Не удалость преобразовать дату из пути");
+            }
+
+
             request.AddBody(
                 new
                 {
-                    timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
+                    // timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
+                    timestamp = dt.ToString("dd.MM.yyyy hh:mm:ss"),
                     external_id = Guid.NewGuid().ToString("N"),
                     receipt = new
                     {

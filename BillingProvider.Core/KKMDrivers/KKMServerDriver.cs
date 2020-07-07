@@ -23,7 +23,7 @@
         public string CompanyEmail { get; }
 
 
-        public void RegisterCheck(string clientInfo, string name, string sum)
+        public void RegisterCheck(string clientInfo, string name, string sum, string filePath)
         {
             throw new System.NotImplementedException();
         }
