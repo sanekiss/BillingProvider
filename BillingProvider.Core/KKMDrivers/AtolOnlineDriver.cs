@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -46,7 +47,7 @@ namespace BillingProvider.Core.KKMDrivers
         private string Token { get; set; }
         private DateTime TokenDate { get; set; }
 
-        public async void RegisterCheck(string clientInfo, string name, string sum)
+        public async void RegisterCheck(string clientInfo, string name, string sum, string filePath)
         {
             Log.Info($"Регистрация чека: {clientInfo}; {name}; {sum}");
 
@@ -55,33 +56,39 @@ namespace BillingProvider.Core.KKMDrivers
             var tmpStrings = new List<object>();
             foreach (var str in checkStrings)
             {
-                var t = str.Split('+');
-                if (t.Length < 2)
+                try
                 {
-                    t = new[] {"Вывоз ТКО", sum};
-                }
-
-                tmpStrings.Add(
-                    new
+                    var t = str.Split('+');
+                    if (t.Length < 2)
                     {
-                        name = t[0],
-                        // name = "Вывоз ТКО",
-                        price = decimal.Parse(t[1].Replace(".", ",")),
-                        quantity = 1.0,
-                        sum = decimal.Parse(t[1].Replace(".", ",")),
-                        payment_object = "service",
-                        payment_method = "full_payment",
-                        vat = new
-                        {
-                            type = "none"
-                        }
+                        t = new[] {"Вывоз ТКО", sum};
                     }
-                );
+
+                    tmpStrings.Add(
+                        new
+                        {
+                            name = t[0],
+                            // name = "Вывоз ТКО",
+                            price = decimal.Parse(t[1].Replace(".", ",")),
+                            quantity = 1.0,
+                            sum = decimal.Parse(t[1].Replace(".", ",")),
+                            payment_object = "service",
+                            payment_method = "full_payment",
+                            vat = new
+                            {
+                                type = "none"
+                            }
+                        }
+                    );
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, "Неверный формат строки");
+                }
             }
 
             RestRequest request;
             if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)
-
             {
                 request = new RestRequest("getToken", Method.POST)
                 {
@@ -101,10 +108,26 @@ namespace BillingProvider.Core.KKMDrivers
             };
             request.AddHeader("Content-Type", "application/json; charset=utf-8");
             request.AddHeader("Token", Token);
+
+            var dt = DateTime.Now;
+            try
+            {
+                if (Regex.IsMatch(filePath, @"\d+\\\d+\\\d+"))
+                {
+                    var match = Regex.Match(filePath, @"\d+\\\d+\\\d+").ToString().Split('\\');
+                    dt = new DateTime(int.Parse(match[0]), int.Parse(match[1]), int.Parse(match[2]), 09, 30, 00);
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Warn("Не удалость преобразовать дату из пути");
+            }
+
             request.AddBody(
                 new
                 {
-                    timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
+                    // timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
+                    timestamp = dt.ToString("dd.MM.yyyy hh:mm:ss"),
                     external_id = Guid.NewGuid().ToString("N"),
                     receipt = new
                     {
@@ -134,26 +157,41 @@ namespace BillingProvider.Core.KKMDrivers
                     }
                 }
             );
-            var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
-            Log.Info($"UUID чека для {clientInfo}: {res.Data?.Uuid ?? res.Content}");
-            // Log.Info(
-            //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
 
-            if (res?.Data?.Uuid == null)
+            try
             {
-                return;
+                var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
+                if (!string.IsNullOrEmpty(res.Data?.Uuid))
+                {
+                    Log.Info($"UUID чека для {clientInfo}: {res.Data?.Uuid}");
+                }
+                else
+                {
+                    throw new ArgumentNullException($"UUID не получен\n\n{res.Content}");
+                }
+                // Log.Info(
+                //     $"Ссылка для проверки состояния: https://testonline.atol.ru/possystem/v4/{GroupId}/report/{res.Data.Uuid}?token={Token}");
+
+                if (res?.Data?.Uuid == null)
+                {
+                    throw new ArgumentNullException("UUID не получени");
+                }
+
+                var req = new RestRequest($"{GroupId}/report/{res.Data.Uuid}", Method.GET)
+                {
+                    RequestFormat = DataFormat.Json
+                };
+                req.AddHeader("Token", Token);
+                await Task.Delay(7500);
+                var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
+                var json = JObject.Parse(res0.Data.Payload);
+                var url = json["ofd_receipt_url"];
+                Log.Info($"Ссылка на ОФД ({res.Data.Uuid}): {url}");
             }
-
-            var req = new RestRequest($"{GroupId}/report/{res.Data.Uuid}", Method.GET)
+            catch (Exception e)
             {
-                RequestFormat = DataFormat.Json
-            };
-            req.AddHeader("Token", Token);
-            await Task.Delay(7500);
-            var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
-            var json = JObject.Parse(res0.Data.Payload);
-            var url = json["ofd_receipt_url"];
-            Log.Info($"Ссылка на ОФД ({res.Data.Uuid}): {url}");
+                Log.Error(e, $"Ошибка при получении данных. Файл: {filePath}, строка {name};{clientInfo};{sum}");
+            }
         }
 
         public async void RegisterTestCheck()

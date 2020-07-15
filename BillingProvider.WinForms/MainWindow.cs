@@ -113,7 +113,6 @@ namespace BillingProvider.WinForms
             {
                 _log.Error($"Не удалось открыть файл: {openFileDialog.FileName}");
                 Text = @"Billing Provider";
-
             }
         }
 
@@ -230,7 +229,7 @@ namespace BillingProvider.WinForms
                 try
                 {
                     _conn.RegisterCheck(currentRow.Cells[0].Value.ToString(), currentRow.Cells[3].Value.ToString(),
-                        currentRow.Cells[2].Value.ToString());
+                        currentRow.Cells[2].Value.ToString(), string.Empty);
 
                     await Task.Delay(1500);
 
@@ -354,7 +353,7 @@ namespace BillingProvider.WinForms
                 foreach (var node in parser.Data)
                 {
                     _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, String.Empty, node.Sum));
+                    _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, _filePath));
                 }
 
                 if (!tmrQueue.Enabled)
@@ -368,13 +367,13 @@ namespace BillingProvider.WinForms
             }
         }
 
-        private void ExecuteTask(string clientInfo, string name, string sum)
+        private void ExecuteTask(string clientInfo, string name, string sum, string filePath)
         {
             _log.Debug($"Current row: {clientInfo}, {name}, {sum}");
 
             try
             {
-                _conn.RegisterCheck(clientInfo, name, sum);
+                _conn.RegisterCheck(clientInfo, name, sum, filePath);
             }
             catch
             {
@@ -426,7 +425,7 @@ namespace BillingProvider.WinForms
                     foreach (var node in parser.Data)
                     {
                         _log.Debug($"Parsing current row: {node.Name}, {node.Sum}");
-                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum));
+                        _taskQueue.Enqueue(() => ExecuteTask(node.Name, string.Empty, node.Sum, file));
                     }
 
                     if (!tmrQueue.Enabled)

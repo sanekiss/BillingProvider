@@ -13,12 +13,19 @@ namespace BillingProvider.Core
         public static IParser Select(string path)
         {
             var firstLine = File.ReadLines(path).First();
+            
             if (firstLine.Contains("html"))
             {
                 Log.Debug("Select HtmlKbbParser");
                 return new HtmlKbbParser(path);
             }
 
+            if (path.Contains("Реестр ЭТ"))
+            {
+                Log.Debug("Select etxlsx parser");
+                return new EtXlsxParser(path);
+            }
+            
             if (path.EndsWith("xlsx") || path.EndsWith("xls"))
             {
                 Log.Debug("Select xlsx parser");

@@ -11,7 +11,7 @@
 
         string CompanyEmail { get; }
 
-        void RegisterCheck(string clientInfo, string name, string sum);
+        void RegisterCheck(string clientInfo, string name, string sum, string filePath);
         void RegisterTestCheck();
 
         void TestConnection();
