@@ -83,23 +83,31 @@ namespace BillingProvider.Core.KKMDrivers
                 }
                 catch (Exception e)
                 {
-                    Log.Error(e, "Неверный формат строки");
+                    Log.Error(e, $"Неверный формат строки$: {clientInfo}; {name}; {sum}");
                 }
             }
 
             RestRequest request;
-            if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)
+            try
             {
-                request = new RestRequest("getToken", Method.POST)
+                if (string.IsNullOrEmpty(Token) || TokenDate <= DateTime.Now)
                 {
-                    RequestFormat = DataFormat.Json
-                };
-                request.AddHeader("Content-Type", "application/json; charset=utf-8");
-                request.AddBody(new {login = Login, pass = Password});
-                var res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
-                Token = res3.Data.Token;
-                TokenDate = DateTime.Parse(res3.Data.Timestamp) + TimeSpan.FromHours(24);
-                Log.Info($"Получен токен: {Token}");
+                    request = new RestRequest("getToken", Method.POST)
+                    {
+                        RequestFormat = DataFormat.Json
+                    };
+                    request.AddHeader("Content-Type", "application/json; charset=utf-8");
+                    request.AddBody(new {login = Login, pass = Password});
+                    var res3 = await _client.ExecuteTaskAsync<AuthResponse>(request, _cancelTokenSource.Token);
+                    Token = res3.Data.Token;
+                    TokenDate = DateTime.Parse(res3.Data.Timestamp) + TimeSpan.FromHours(24);
+                    Log.Info($"Получен токен: {Token}");
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+                return;
             }
 
             request = new RestRequest($"{GroupId}/sell", Method.POST)
@@ -123,43 +131,44 @@ namespace BillingProvider.Core.KKMDrivers
                 Log.Warn("Не удалость преобразовать дату из пути");
             }
 
-            request.AddBody(
-                new
-                {
-                    // timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
-                    timestamp = dt.ToString("dd.MM.yyyy hh:mm:ss"),
-                    external_id = Guid.NewGuid().ToString("N"),
-                    receipt = new
-                    {
-                        client = new
-                        {
-                            email = "none",
-                            name = clientInfo,
-                        },
-                        company = new
-                        {
-                            email = CompanyEmail,
-                            sno = "osn",
-                            inn = Inn,
-                            payment_address = Hostname
-                        },
-                        items = tmpStrings.ToArray(),
-                        cashier = CashierName,
-                        payments = new List<object>
-                        {
-                            new
-                            {
-                                type = 1,
-                                sum = decimal.Parse(sum)
-                            }
-                        },
-                        total = decimal.Parse(sum)
-                    }
-                }
-            );
-
             try
             {
+                request.AddBody(
+                    new
+                    {
+                        // timestamp = DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"),
+                        timestamp = dt.ToString("dd.MM.yyyy hh:mm:ss"),
+                        external_id = Guid.NewGuid().ToString("N"),
+                        receipt = new
+                        {
+                            client = new
+                            {
+                                email = "none",
+                                name = clientInfo,
+                            },
+                            company = new
+                            {
+                                email = CompanyEmail,
+                                sno = "osn",
+                                inn = Inn,
+                                payment_address = Hostname
+                            },
+                            items = tmpStrings.ToArray(),
+                            cashier = CashierName,
+                            payments = new List<object>
+                            {
+                                new
+                                {
+                                    type = 1,
+                                    sum = decimal.Parse(sum)
+                                }
+                            },
+                            total = decimal.Parse(sum)
+                        }
+                    }
+                );
+
+
                 var res = await _client.ExecuteTaskAsync<SellResponse>(request, _cancelTokenSource.Token);
                 if (!string.IsNullOrEmpty(res.Data?.Uuid))
                 {
@@ -275,9 +284,16 @@ namespace BillingProvider.Core.KKMDrivers
             req.AddHeader("Token", Token);
             await Task.Delay(7500);
             var res0 = await _client.ExecuteTaskAsync<ReportResponse>(req, _cancelTokenSource.Token);
-            var json = JObject.Parse(res0.Data.Payload);
-            var url = json["ofd_receipt_url"];
-            Log.Info($"Ссылка на ОФД: {url}");
+            try
+            {
+                var json = JObject.Parse(res0.Data.Payload);
+                var url = json["ofd_receipt_url"];
+                Log.Info($"Ссылка на ОФД: {url}");
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
         }
 
         public async void TestConnection()
