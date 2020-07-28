@@ -17,9 +17,8 @@ jobs:
       uses: warrenbuckley/Setup-MSBuild@v1
     - uses: nuget/setup-nuget@v1
       with:
-        nuget-api-key: ${{ secrets.NuGetAPIKey }}
         nuget-version: '5.x'
-    - run: nuget restore BillingProvider.WinForms\BillingProvider.WinForms.csproj
+    - run: nuget restore BillingProvider.sln
 
     - name: MSBuild
       working-directory: BillingProvider.WinForms
