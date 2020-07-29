@@ -1,16 +1,13 @@
-name: .NET Desktop
+name: test tag
 
 on:
   push:
     branches: [ master ]
-    tags: 0.*
-  pull_request:
-    branches: [ master ]
-    tags: 0.*
+    tags: v*
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
     - name: Build DotNET35
-      run: echo "$GITHUB_REF"
+      run: echo ${{ github.head_ref }}
