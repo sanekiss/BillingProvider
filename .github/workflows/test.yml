@@ -10,4 +10,6 @@ jobs:
     steps:
     
     - name: test variable
-      run: Write-Output ${{ github.event.release.tag_name }}
+      run:
+        echo "TEst" 
+        echo ${{ github.event.release.tag_name }}
