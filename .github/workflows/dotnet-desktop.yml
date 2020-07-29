@@ -26,12 +26,13 @@ jobs:
       working-directory: BillingProvider.WinForms
       run: msbuild BillingProvider.WinForms.csproj
       
-    - name: tag number
-      run : echo ${{ github.event.release.tag_name }}
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: my-artifact
-        path: BillingProvider.${{ env:tag number }}.0.zip
+        path: BillingProvider.${{ get_version }}.0.zip
       
