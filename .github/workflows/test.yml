@@ -11,5 +11,6 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-  - name: Build DotNET35
-    run: echo "$GITHUB_REF"
+    steps:
+    - name: Build DotNET35
+      run: echo "$GITHUB_REF"
