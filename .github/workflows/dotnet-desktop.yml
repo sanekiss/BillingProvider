@@ -1,4 +1,4 @@
-name: .NET  Desktop
+name: Build and deploy
 
 on:
   push:
