@@ -1,0 +1,15 @@
+name: .NET Desktop
+
+on:
+  push:
+    branches: [ master ]
+    tags: 0.*
+  pull_request:
+    branches: [ master ]
+    tags: 0.*
+
+jobs:
+  build:
+    runs-on: windows-latest
+  - name: Build DotNET35
+    run: echo "$GITHUB_REF"
