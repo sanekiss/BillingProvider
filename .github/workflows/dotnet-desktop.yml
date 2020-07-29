@@ -29,12 +29,12 @@ jobs:
     - name: Get the version
       id: get_version
       run: 
-        echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-        echo ${{ GITHUB_REF }}
+        echo ::set-env name=VERSION::${GITHUB_REF#refs/tags/}
+        echo ${{ env.Version }}
         
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
       with:
         name: my-artifact
-        path: BillingProvider.${{ steps.get_version.outputs.VERSION }}.0.zip
+        path: BillingProvider.${{ env.VERSION }}.0.zip
       
