@@ -10,5 +10,5 @@ jobs:
     runs-on: windows-latest
     steps:
     
-    - name: Build DotNET35
+    - name: test variable
       run: echo ${{ github.event.release.tag_name }}
