@@ -1,0 +1,17 @@
+name: test tag
+
+on:
+  push:
+    tags: v*
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    
+    - name: test variable
+      id: get_ver
+      shell: bash
+      run: 
+        echo ::set-env name=VERSION::${${{ github.ref }}:10}
+        echo ${{ env.VERSION }}
