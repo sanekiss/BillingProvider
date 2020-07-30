@@ -9,9 +9,10 @@ jobs:
     runs-on: windows-latest
     steps:
     
-    - name: test variable
+    - name: set variable
       id: get_ver
-      shell: bash
       run: 
-        echo ::set-env name=VERSION::${${{ github.ref }}:10}
-        echo ${{ env.VERSION }}
+        echo ::set-env name=VERSION::${env:GITHUB_REF} -replace ‘refs/tags/’, ‘’
+      
+    - name: get variable
+      run: echo ${{ env.VERSION }}
