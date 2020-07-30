@@ -11,10 +11,12 @@ jobs:
     steps:
     - uses: actions/checkout@main
     
-    - name: Get the version
-      id: get_version
-      shell: bash
-      run: echo ::set-output name=VERSION::${${{ github.ref }}/refs\/tags\//}
+    - name: Get version
+      id: get_ver
+      run:
+        $SOURCE_TAG = ${env:GITHUB_REF} -replace ‘refs/tags/’, ‘’
+        
+        echo “::set-env name=SOURCE_TAG::$SOURCE_TAG”
 
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
@@ -33,8 +35,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        tag_name: ${{ steps.get_version.outputs.VERSION }}
-        release_name: Release ${{ steps.get_version.outputs.VERSION }}
+        tag_name: ${{ env.SOURCE_TAG }}
+        release_name: Release ${{ env.SOURCE_TAG }}
         body: |
           Automated Release by GitHub Action CI
         draft: false
@@ -48,5 +50,5 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./
-        asset_name: BillingProvider.${{ steps.get_version.outputs.VERSION }}.0.zip
+        asset_name: BillingProvider.${{ env.SOURCE_TAG }}.0.zip
         asset_content_type: application/zip        
