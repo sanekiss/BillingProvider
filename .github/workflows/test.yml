@@ -13,7 +13,8 @@ jobs:
       id: get_ver
       run:
         $SOURCE_TAG = ${env:GITHUB_REF} -replace ‘refs/tags/’, ‘’
-        echo "::set-output name=VERSION::$SOURCE_TAG"
+        
+        echo “::set-env name=SOURCE_TAG::$SOURCE_TAG”
       
     - name: get variable
       run: echo "::${{ steps.get_ver.outputs.VERSION }}"
