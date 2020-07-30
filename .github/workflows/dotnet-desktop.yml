@@ -29,6 +29,7 @@ jobs:
       working-directory: BillingProvider.WinForms
       run: 
         msbuild BillingProvider.WinForms.csproj
+        
         dir  
       
     - name: Create Release
