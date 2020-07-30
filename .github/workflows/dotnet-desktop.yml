@@ -30,6 +30,8 @@ jobs:
       run: 
         msbuild BillingProvider.WinForms.csproj
         
+        cd ..
+        
         dir  
       
     - name: Create Release
