@@ -12,7 +12,7 @@ jobs:
     - name: set variable
       id: get_ver
       run: 
-        echo ::set-env name=VERSION::${env:GITHUB_REF} -replace ‘refs/tags/’, ‘’
+        echo ::set-output name=VERSION::${env:GITHUB_REF} -replace ‘refs/tags/’, ‘’
       
     - name: get variable
-      run: echo ${{ env.VERSION }}
+      run: echo ${{ steps.get_ver.outputs.VERSION }}
