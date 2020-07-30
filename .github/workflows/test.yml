@@ -17,4 +17,4 @@ jobs:
         echo “::set-env name=SOURCE_TAG::$SOURCE_TAG”
       
     - name: get variable
-      run: echo "${{ steps.get_ver.outputs.SOURCE_TAG }}"
+      run: echo "${{ env.SOURCE_TAG }}"
