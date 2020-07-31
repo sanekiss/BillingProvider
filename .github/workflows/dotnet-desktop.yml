@@ -28,7 +28,7 @@ jobs:
     - name: MSBuild
       working-directory: BillingProvider.WinForms
       run: 
-        msbuild BillingProvider.WinForms.csproj -property:Configuration=Release;VersionNumber=${{ env.SOURCE_TAG }}
+        msbuild BillingProvider.WinForms.csproj -property:Configuration=Release;AssemblyName=${{ env.SOURCE_TAG }};Version=${{ env.SOURCE_TAG }}
         
         cd ..
          
