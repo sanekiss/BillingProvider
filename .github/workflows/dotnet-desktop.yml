@@ -28,7 +28,9 @@ jobs:
     - name: MSBuild
       working-directory: BillingProvider.WinForms
       run: 
-        msbuild BillingProvider.WinForms.csproj -property:Configuration=Release
+        msbuild BillingProvider.WinForms.csproj -property:Configuration=Release;VersionNumber=${{ env.SOURCE_TAG }}
+        
+        cd ..
          
         dir  
       
@@ -52,6 +54,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BillingProvider.${{ env.SOURCE_TAG }}.0.zip
+        asset_path: ../BillingProvider.${{ env.SOURCE_TAG }}.0.zip
         asset_name: BillingProvider.${{ env.SOURCE_TAG }}.0.zip
         asset_content_type: zip      
