@@ -14,7 +14,7 @@ jobs:
     - name: Get version
       id: get_ver
       run:
-        $SOURCE_TAG = ${env:GITHUB_REF} -replace ‘refs/tags/’, ‘’
+        $SOURCE_TAG = ${env:GITHUB_REF} -replace ‘refs/tags/v’, ‘’
         
         echo “::set-env name=SOURCE_TAG::$SOURCE_TAG”
 
@@ -40,8 +40,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        tag_name: ${{ env.SOURCE_TAG }}
-        release_name: Release ${{ env.SOURCE_TAG }}
+        tag_name: v${{ env.SOURCE_TAG }}
+        release_name: Release v${{ env.SOURCE_TAG }}
         body: |
           Automated Release by GitHub Action CI
         draft: false
