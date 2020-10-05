@@ -54,6 +54,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ../BillingProvider.${{ env.SOURCE_TAG }}.0.zip
-        asset_name: BillingProvider.${{ env.SOURCE_TAG }}.0.zip
+        asset_path: ../BillingProvider.1.0.0.0.zip
+        asset_name: BillingProvider.1.0.0.0.zip
+        body_path: ../ReleaseNotes.md
         asset_content_type: zip      
