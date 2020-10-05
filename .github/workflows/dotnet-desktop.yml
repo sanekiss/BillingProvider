@@ -42,7 +42,7 @@ jobs:
       with:
         tag_name: v${{ env.SOURCE_TAG }}
         release_name: Release v${{ env.SOURCE_TAG }}
-        body_path: ../ReleaseNotes.md
+        body_path: ReleaseNotes.md
         draft: false
         prerelease: false
         
